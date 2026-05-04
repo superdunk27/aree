@@ -11,6 +11,25 @@ related: ψ/learn/swimming/50m-freestyle/50m-freestyle.md
 
 ---
 
+## 🚨 Paradigm Note — มี 2 แนวทางที่ขัดกัน
+
+ปรัชญาด้านล่าง = **traditional sprint orthodoxy** (Auburn/USA/Australian default). แต่มี **paradigm ใหม่** ที่ Cameron McEvoy พิสูจน์แล้วใน Paris 2024:
+
+| Aspect | Traditional | McEvoy method |
+|--------|-------------|---------------|
+| Pool volume | 6-15 km/wk | **~2 km/wk** |
+| Per session | 4-8 km | **300-500m** |
+| Sessions/wk | 6-10 | **6** (แต่สั้น) |
+| Cross-training | Plyo + lifting | **Rock climbing 5x/wk × 2-4 hr** |
+| Intensity | Mixed | **ทุก meter = race-pace หรือเร็วกว่า** |
+
+**เมื่อใช้ McEvoy method**: ผู้ที่ **มี foundation 5+ ปี + expert coach + overtrained จาก high volume**
+**เมื่อใช้ traditional**: เริ่มต้น/พัฒนาเทคนิค/ขาด strength base
+
+→ ลึก: `ψ/learn/swimming/cameron-mcevoy/` (3 docs + hub)
+
+---
+
 ## ⚡ The 80/20 — สิ่งที่สำคัญที่สุด 8 อย่าง
 
 ### 1. Underwater dolphin kick = "5th stroke"
