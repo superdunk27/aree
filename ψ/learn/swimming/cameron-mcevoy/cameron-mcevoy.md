@@ -1,6 +1,8 @@
 # Cameron McEvoy — Profile & Method Index
 
-> Australian sprinter. Olympic gold 50m freestyle Paris 2024 (21.25). Famous for **radically reduced training volume** (2 km/wk vs traditional 30 km/wk) + **rock climbing** as primary cross-training. Validates a paradigm that contradicts most sprint orthodoxy
+> Australian sprinter. **WORLD RECORD 50m FREESTYLE: 20.88** (2026-03-20 Shenzhen — ทำลายสถิติ Cielo 20.91 ที่ยืนมา ~17 ปี). Olympic gold Paris 2024 (21.25). Famous for **radically reduced training volume** (1-2 km/wk vs traditional 30-40 km/wk) + **strength + mobility-led** approach. Validates a paradigm that contradicts most sprint orthodoxy
+
+**⚠️ Update 2026-05-04 23:10**: Toey ให้ primary source (YouTube transcript ของ 2 interviews) → เจอ updates สำคัญที่ web research ไม่เคยจับได้. รายละเอียดอยู่ใน `2026-05-04/2310_PRIMARY-SOURCE-EXTRACTION.md`
 
 ## Why Aree Studied This
 
@@ -18,7 +20,7 @@ Toey ถามตรง ๆ ว่าทำไม cheat sheet ของ 50m free
 
 ## Explorations
 
-### 2026-05-04 22:57 (3 parallel Haiku agents)
+### 2026-05-04 22:57 (3 parallel Haiku agents — web research)
 
 | # | File | ขอบเขต |
 |---|------|--------|
@@ -26,22 +28,35 @@ Toey ถามตรง ๆ ว่าทำไม cheat sheet ของ 50m free
 | 02 | [CROSS-TRAINING](2026-05-04/2257_02_CROSS-TRAINING.md) | bouldering 5x/wk × 2-4 hr, calisthenics, gymnastics, weightlifting, mobility role |
 | 03 | [CAREER-CONTEXT](2026-05-04/2257_03_CAREER-CONTEXT.md) | timeline 2012→Paris 2024, Rio 2016 disappointment, physics PhD, Tim Lane, race results |
 
-**Total**: ~75KB / 1177 บรรทัด
+### 2026-05-04 23:10 (primary source — Toey's gift 🎁)
 
-## Top-Line Takeaways
+| # | File | ที่มา |
+|---|------|------|
+| 04 | [PRIMARY-SOURCE-EXTRACTION](2026-05-04/2310_PRIMARY-SOURCE-EXTRACTION.md) | 2 YouTube interview transcripts ที่ Toey ขุดมาให้ — verified facts, 25 quotes, corrections to prior research, NEW themes |
 
-จากที่ทุก doc บรรจบกัน:
+**Sources extracted from**:
+- "Cam McEvoy's Pre WR Gym Session" — `youtube.com/watch?v=DME7vuLuTSg` (~6 wk pre-WR, ก.พ. 2026)
+- "The 4-Time Olympian Who Started Over" — `youtube.com/watch?v=b683jSabZy8` (Shared Minds podcast)
 
-1. **30 km/wk → 2 km/wk** — ลดมหาศาล. ทุก meter ที่ว่ายเป็น **race-pace หรือเร็วกว่า**
+**Why critical**: web research จับ Paris 2024 (21.25) ได้ แต่ **ไม่จับ WR 20.88 มี.ค. 2026**. Primary source แก้ + เพิ่ม specifics ที่ second-hand articles ไม่มี (coaches by name, exact lifts, junior swimmers, body weight changes, ปรัชญา "closure either way")
+
+**Total now**: ~100KB / 1589 บรรทัด, 4 docs
+
+## Top-Line Takeaways (verified from primary source where possible)
+
+1. **30-40 km/wk → 1-2 km/wk** — ลดมหาศาล. ทุก meter ที่ว่ายเป็น **race-pace หรือเร็วกว่า** ✓ verified
 2. **6 pool sessions/wk × 300-500m เท่านั้น** — แต่ต้องเร็วทุกครั้ง
-3. **Rock climbing ~5x/wk × 2-4 hr** — แทนที่ aerobic work + dryland strength + grip/upper body พัฒนา
-4. **French Contrast Method** — heavy pull-up → immediate sprint 25m → potentiated CNS = ใช้ได้ทันที
-5. **3-phase macrocycle** — Strength (6 mo) → Power (4 mo) → Race-specific (3 mo)
-6. **Rio 2016 = breaking point** — overtraining failure → 8 ปีของการ rebuild ปรัชญาการฝึก
-7. **Physics PhD** = analytical mindset → ไม่ได้ทำตามประเพณี ใช้ data-driven approach
-8. **Tim Lane** = หายากที่โค้ช traditional ยอมรับวิธีนี้
-9. **Junior athlete results** (Ollie Moclair: 23.9 → 21.7 ใน 18 เดือนที่ ~1 km/wk) — แสดงว่าวิธีนี้อาจ transfer ได้
-10. **Caveat** — ทำงานได้สำหรับ **elite 50m sprinter ที่มี foundation แล้ว** + มี **expert coach**. **เสี่ยง** ถ้า junior, distance event, หรือไม่มี coach
+3. **Strength กลายเป็น core** (ไม่ใช่ climbing เป็นหลัก) — กรกฎ 2025 onward → 85-90% strength, 10-15% mobility
+4. **AB-split gym 3x/wk** — A: pull-ups + trap bar + seal row + bench pull. B: trap bar + bench + accessories
+5. **Squat ถูกเลิก** — ankle stiffness ทำให้เสี่ยงเกิน → trap bar deadlift "from the ground" แทน ✓ verified
+6. **Bench press เริ่มครั้งแรกในชีวิต** หลังหลีกเลี่ยงมาตลอด — converted หลัง Japan Open test ✓ verified
+7. **Coaches**: Matt Smith (UK, สาย Charles Poliquin, ทำทั้ง mobility + strength หลัง Paris) + Dan Rogers (strength, ก่อน Paris) ✓ verified
+8. **น้ำหนัก** 87 kg Paris → 94 kg มี.ค. 2026 (intentional weight gain on strength block) ✓ verified
+9. **Tokyo 2020 = breaking point** (ไม่ใช่ Rio 2016 ตามที่ web เคยบอก!) — 27th, ไม่ผ่าน semis, retired effectively → ปีถัดมาเริ่มฟิตเนสเพื่อความสนุก
+10. **"Closure either way"** decision framework — ตัดสินใจลองวิธีใหม่ เพราะ if works = great, if not = ปิดประเด็นได้ว่า traditional ดีอยู่แล้ว
+11. **Junior swimmers** (Akira, Katu, others ที่ Tim Lane/Matt Smith mentor) ใช้วิธีเดียวกัน → เริ่มเป็น **movement** ไม่ใช่ outlier เดี่ยว
+12. **Body**: 203 cm armspan vs ~6'0" frame — "extremely rectangular" ✓ verified
+13. **Caveat (ไม่เปลี่ยน)** — ทำงานได้สำหรับ **elite 50m sprinter ที่มี foundation แล้ว** + มี **expert coach**. **เสี่ยง** ถ้า junior, distance event, หรือไม่มี coach
 
 ## วิธี Toey ใช้ knowledge นี้
 

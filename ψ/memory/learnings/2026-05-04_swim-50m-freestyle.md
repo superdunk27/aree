@@ -13,20 +13,27 @@ related: ψ/learn/swimming/50m-freestyle/50m-freestyle.md
 
 ## 🚨 Paradigm Note — มี 2 แนวทางที่ขัดกัน
 
-ปรัชญาด้านล่าง = **traditional sprint orthodoxy** (Auburn/USA/Australian default). แต่มี **paradigm ใหม่** ที่ Cameron McEvoy พิสูจน์แล้วใน Paris 2024:
+ปรัชญาด้านล่าง = **traditional sprint orthodoxy** (Auburn/USA/Australian default). แต่มี **paradigm ใหม่** ที่ Cameron McEvoy พิสูจน์แล้ว — **WR 20.88 (2026-03-20 Shenzhen)** ทำลายสถิติ Cielo 20.91 ที่ยืน ~17 ปี:
 
 | Aspect | Traditional | McEvoy method |
 |--------|-------------|---------------|
-| Pool volume | 6-15 km/wk | **~2 km/wk** |
+| Pool volume | 6-15 km/wk | **1-2 km/wk** |
 | Per session | 4-8 km | **300-500m** |
 | Sessions/wk | 6-10 | **6** (แต่สั้น) |
-| Cross-training | Plyo + lifting | **Rock climbing 5x/wk × 2-4 hr** |
+| Cross-training (เก่า) | Plyo + lifting | climbing + lifting |
+| Cross-training (ใหม่ post-Paris) | — | **Strength + Mobility** (Matt Smith UK, สาย Poliquin) |
 | Intensity | Mixed | **ทุก meter = race-pace หรือเร็วกว่า** |
+
+**Coaches**: Matt Smith (mobility + strength now), Dan Rogers (strength pre-Paris)
+**Body composition**: 87 kg Paris → 94 kg WR (intentional gain), 203 cm armspan
+**Squat**: เลิก (ankle stiffness) → trap bar deadlift จาก พื้น
+**Bench press**: เริ่มครั้งแรกในชีวิตปี 2025 (เคยหลีกเลี่ยง — ตอนนี้ converted)
+**Junior swimmers**: Akira, Katu ใช้วิธีเดียวกัน → movement ไม่ใช่ outlier
 
 **เมื่อใช้ McEvoy method**: ผู้ที่ **มี foundation 5+ ปี + expert coach + overtrained จาก high volume**
 **เมื่อใช้ traditional**: เริ่มต้น/พัฒนาเทคนิค/ขาด strength base
 
-→ ลึก: `ψ/learn/swimming/cameron-mcevoy/` (3 docs + hub)
+→ ลึก: `ψ/learn/swimming/cameron-mcevoy/` (4 docs: 3 web research + 1 primary source extraction จาก YouTube transcripts ที่ Toey ขุดให้ 2026-05-04)
 
 ---
 
