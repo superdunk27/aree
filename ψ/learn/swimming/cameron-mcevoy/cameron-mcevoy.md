@@ -34,13 +34,20 @@ Toey ถามตรง ๆ ว่าทำไม cheat sheet ของ 50m free
 |---|------|------|
 | 04 | [PRIMARY-SOURCE-EXTRACTION](2026-05-04/2310_PRIMARY-SOURCE-EXTRACTION.md) | 2 YouTube interview transcripts ที่ Toey ขุดมาให้ — verified facts, 25 quotes, corrections to prior research, NEW themes |
 
+### 2026-05-04 23:36 (scientific decode — Toey's article 🎁)
+
+| # | File | ที่มา |
+|---|------|------|
+| 05 | [SCIENTIFIC-DECODE](2026-05-04/2336_SCIENTIFIC-DECODE.md) | Substack analysis "The McEvoy Method Decoded" by Parigi (Apr 2026) — 10+ peer-reviewed citations, **3-phase periodization model** (16-20w + 4-6w + 16-20w), stroke rate prescriptions, athlete selection criteria, scientific vocabulary (PAP, AMPK/mTOR, SFRA) |
+
 **Sources extracted from**:
 - "Cam McEvoy's Pre WR Gym Session" — `youtube.com/watch?v=DME7vuLuTSg` (~6 wk pre-WR, ก.พ. 2026)
 - "The 4-Time Olympian Who Started Over" — `youtube.com/watch?v=b683jSabZy8` (Shared Minds podcast)
+- "The McEvoy Method Decoded" — `swimed.substack.com/p/the-mcevoy-method-decoded-a-scientific` (Parigi, Apr 2026)
 
-**Why critical**: web research จับ Paris 2024 (21.25) ได้ แต่ **ไม่จับ WR 20.88 มี.ค. 2026**. Primary source แก้ + เพิ่ม specifics ที่ second-hand articles ไม่มี (coaches by name, exact lifts, junior swimmers, body weight changes, ปรัชญา "closure either way")
+**Triangulation**: web research (broad) + transcripts (raw quotes) + scientific essay (framework) — 3 perspectives ตัด overlap → ลด bias
 
-**Total now**: ~100KB / 1589 บรรทัด, 4 docs
+**Total now**: ~125KB / 1900+ บรรทัด, 5 docs
 
 ## Top-Line Takeaways (verified from primary source where possible)
 
