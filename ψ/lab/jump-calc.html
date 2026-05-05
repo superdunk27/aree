@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Jump Calculator — Aree</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, system-ui, "Segoe UI", sans-serif;
+    background: #f5f5f7;
+    color: #1d1d1f;
+    padding: 20px;
+    max-width: 480px;
+    margin: 0 auto;
+    -webkit-text-size-adjust: 100%;
+  }
+  h1 {
+    font-size: 22px;
+    margin-bottom: 6px;
+    text-align: center;
+  }
+  .subtitle {
+    text-align: center;
+    color: #86868b;
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+  .card {
+    background: white;
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  .mode-toggle {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .mode-btn {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #d2d2d7;
+    background: white;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .mode-btn.active {
+    background: #007aff;
+    color: white;
+    border-color: #007aff;
+  }
+  label {
+    display: block;
+    font-size: 13px;
+    color: #86868b;
+    margin-bottom: 6px;
+    margin-top: 12px;
+  }
+  input {
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    border: 1px solid #d2d2d7;
+    border-radius: 8px;
+    -webkit-appearance: none;
+    background: white;
+  }
+  input:focus {
+    border-color: #007aff;
+    outline: none;
+  }
+  .result {
+    text-align: center;
+    padding: 16px;
+    background: #f0f7ff;
+    border-radius: 10px;
+    margin-top: 16px;
+  }
+  .result-value {
+    font-size: 40px;
+    font-weight: 600;
+    color: #007aff;
+    line-height: 1;
+  }
+  .result-unit {
+    font-size: 13px;
+    color: #86868b;
+    margin-top: 4px;
+  }
+  .result-detail {
+    font-size: 12px;
+    color: #86868b;
+    margin-top: 8px;
+  }
+  button.action {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    background: #007aff;
+    color: white;
+    cursor: pointer;
+    margin-top: 12px;
+  }
+  button.action:active { background: #0051d5; }
+  button.secondary {
+    background: white;
+    color: #007aff;
+    border: 1px solid #007aff;
+  }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    text-align: center;
+    margin-top: 12px;
+  }
+  .stat {
+    padding: 10px;
+    background: #f5f5f7;
+    border-radius: 8px;
+  }
+  .stat-value {
+    font-size: 18px;
+    font-weight: 600;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: #86868b;
+    margin-top: 2px;
+  }
+  .jump-list {
+    margin-top: 12px;
+    max-height: 240px;
+    overflow-y: auto;
+  }
+  .jump-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    background: #f5f5f7;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    font-size: 14px;
+  }
+  .jump-item button {
+    background: none;
+    border: none;
+    color: #ff3b30;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 0 6px;
+  }
+  .header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .help {
+    font-size: 12px;
+    color: #86868b;
+    line-height: 1.5;
+    margin-top: 8px;
+  }
+  .help b { color: #1d1d1f; }
+</style>
+</head>
+<body>
+
+<h1>Jump Calculator</h1>
+<div class="subtitle">CMJ / DJ — flight time → jump height</div>
+
+<div class="card">
+  <div class="mode-toggle">
+    <button class="mode-btn active" id="modeFrames">นับเฟรม</button>
+    <button class="mode-btn" id="modeSeconds">วินาที</button>
+  </div>
+
+  <div id="framesInput">
+    <label>จำนวนเฟรม (takeoff → landing)</label>
+    <input type="number" id="frames" inputmode="decimal" placeholder="120">
+    <label>FPS (slow-mo มือถือ = 240)</label>
+    <input type="number" id="fps" value="240" inputmode="decimal">
+  </div>
+
+  <div id="secondsInput" style="display:none;">
+    <label>Flight time (วินาที)</label>
+    <input type="number" id="seconds" inputmode="decimal" step="0.001" placeholder="0.500">
+  </div>
+
+  <div class="result">
+    <div class="result-value" id="height">— cm</div>
+    <div class="result-unit">jump height</div>
+    <div class="result-detail" id="flightTime"></div>
+  </div>
+
+  <button class="action" id="addJump">+ บันทึก jump นี้</button>
+</div>
+
+<div class="card">
+  <div class="header-row">
+    <div style="font-weight:600; font-size:15px;">Session jumps</div>
+    <button class="action secondary" id="reset" style="width:auto; padding:6px 12px; font-size:12px; margin:0;">รีเซ็ต</button>
+  </div>
+  <div class="stats" id="stats" style="display:none;">
+    <div class="stat">
+      <div class="stat-value" id="statCount">0</div>
+      <div class="stat-label">jumps</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" id="statMean">— cm</div>
+      <div class="stat-label">mean</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" id="statSd">— cm</div>
+      <div class="stat-label">SD</div>
+    </div>
+  </div>
+  <div class="jump-list" id="jumpList"></div>
+</div>
+
+<div class="card">
+  <div style="font-weight:600; font-size:15px; margin-bottom:8px;">วิธีใช้</div>
+  <div class="help">
+    <b>1.</b> ถ่าย slow-mo 240fps จากด้านข้าง<br>
+    <b>2.</b> เปิดวิดีโอใน CapCut → step ทีละเฟรม<br>
+    <b>3.</b> หาเฟรม takeoff (เท้าหลุดพื้น) → เริ่มนับ 0<br>
+    <b>4.</b> step forward นับจนถึง landing (เท้าแรกแตะพื้น)<br>
+    <b>5.</b> ใส่จำนวนเฟรมข้างบน → กด "บันทึก jump นี้"<br>
+    <b>6.</b> กระโดด 10 ครั้ง → ดู mean/SD<br><br>
+    <b>SD &lt; 1.5 cm</b> = แม่นพอ ใช้ method นี้ได้<br>
+    <b>SD &gt; 2.5 cm</b> = ไม่สม่ำเสมอ → DIY hardware มีเหตุผล
+  </div>
+</div>
+
+<script>
+const G = 9.81;
+let mode = 'frames';
+let jumps = JSON.parse(localStorage.getItem('aree_jumps') || '[]');
+
+const $ = id => document.getElementById(id);
+
+function calc() {
+  let t = 0;
+  if (mode === 'frames') {
+    const f = parseFloat($('frames').value);
+    const fps = parseFloat($('fps').value);
+    if (!f || !fps || f <= 0 || fps <= 0) {
+      $('height').textContent = '— cm';
+      $('flightTime').textContent = '';
+      return null;
+    }
+    t = f / fps;
+  } else {
+    t = parseFloat($('seconds').value);
+    if (!t || t <= 0) {
+      $('height').textContent = '— cm';
+      $('flightTime').textContent = '';
+      return null;
+    }
+  }
+  const h = (G * t * t / 8) * 100;
+  $('height').textContent = h.toFixed(1) + ' cm';
+  $('flightTime').textContent = 't = ' + t.toFixed(3) + ' s';
+  return { t: t, h: h };
+}
+
+function render() {
+  $('jumpList').innerHTML = jumps.map(function(j, i) {
+    return '<div class="jump-item">' +
+      '<span>#' + (i+1) + ' — <b>' + j.h.toFixed(1) + ' cm</b> (t=' + j.t.toFixed(3) + 's)</span>' +
+      '<button onclick="del(' + i + ')">ลบ</button>' +
+      '</div>';
+  }).reverse().join('');
+
+  if (jumps.length > 0) {
+    $('stats').style.display = 'grid';
+    const heights = jumps.map(function(j) { return j.h; });
+    const mean = heights.reduce(function(a,b) { return a+b; }, 0) / heights.length;
+    const variance = heights.reduce(function(a,b) { return a + Math.pow(b-mean, 2); }, 0) / heights.length;
+    const sd = Math.sqrt(variance);
+    $('statCount').textContent = jumps.length;
+    $('statMean').textContent = mean.toFixed(1) + ' cm';
+    $('statSd').textContent = sd.toFixed(2) + ' cm';
+  } else {
+    $('stats').style.display = 'none';
+  }
+}
+
+function del(i) {
+  jumps.splice(i, 1);
+  localStorage.setItem('aree_jumps', JSON.stringify(jumps));
+  render();
+}
+window.del = del;
+
+$('modeFrames').addEventListener('click', function() {
+  mode = 'frames';
+  $('modeFrames').classList.add('active');
+  $('modeSeconds').classList.remove('active');
+  $('framesInput').style.display = 'block';
+  $('secondsInput').style.display = 'none';
+  calc();
+});
+
+$('modeSeconds').addEventListener('click', function() {
+  mode = 'seconds';
+  $('modeSeconds').classList.add('active');
+  $('modeFrames').classList.remove('active');
+  $('framesInput').style.display = 'none';
+  $('secondsInput').style.display = 'block';
+  calc();
+});
+
+['frames', 'fps', 'seconds'].forEach(function(id) {
+  $(id).addEventListener('input', calc);
+});
+
+$('addJump').addEventListener('click', function() {
+  const r = calc();
+  if (r) {
+    jumps.push({ t: r.t, h: r.h, ts: Date.now() });
+    localStorage.setItem('aree_jumps', JSON.stringify(jumps));
+    if (mode === 'frames') $('frames').value = '';
+    else $('seconds').value = '';
+    calc();
+    render();
+  }
+});
+
+$('reset').addEventListener('click', function() {
+  if (confirm('ลบ jumps ทั้งหมด?')) {
+    jumps = [];
+    localStorage.setItem('aree_jumps', '[]');
+    render();
+  }
+});
+
+render();
+</script>
+
+</body>
+</html>
