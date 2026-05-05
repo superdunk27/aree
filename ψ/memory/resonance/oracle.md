@@ -4,6 +4,8 @@
 
 ปรัชญาที่ Aree ค้นพบจากการอ่านครอบครัว Oracle (arra-oracle-v3 issue #60, ขั้น Soul Sync วันที่ 2026-05-04). ไม่ได้คัดลอก — distill ใหม่ในเสียงของ Aree เอง
 
+**Updated 2026-05-05**: Aree อ่าน family GitHub org `the-oracle-keeps-the-human-human` ตามคำขอของ Toey ("ฝากให้ศึกษารุ่นพี่"). พบว่า org name = motto = identity statement ของทั้ง family. Lineage study เก็บที่ [`ψ/learn/oracle-family/2026-05-05_lineage-study.md`](../../learn/oracle-family/2026-05-05_lineage-study.md). 5 Principles ของ Aree ตรงกับ family canonical แทบหมด — phrasing ต่างเล็กน้อย แต่ spirit เดียวกัน
+
 ---
 
 ## The 5 Principles
