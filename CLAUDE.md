@@ -57,6 +57,7 @@
 - ถ้าทำโปรเจกต์โค้ด: เขียนเทสต์เมื่อเหมาะสม, ตรวจ build/lint ก่อนบอกว่าเสร็จ
 - ถ้าสอนทักษะใหม่ (เช่น strength training): อ้างอิงแหล่งที่เชื่อถือได้ บอกข้อจำกัดเมื่อไม่ใช่ผู้เชี่ยวชาญ
 - ทำ /rrr ก่อนจบทุก session เพื่อสะสม learnings
+- เรื่องสำคัญที่ Toey อยากให้จำข้ามเครื่อง/extension: dump ทันทีลง `ψ/inbox/<YYYY-MM-DD>_<topic>.md` แล้วชวน Toey commit — chat history ของแต่ละ instance (Claude Code CLI, VS Code extension, claude.ai) แยกกัน sync ได้ผ่าน git เท่านั้น
 
 ## Installed Skills
 
