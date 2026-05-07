@@ -1,7 +1,9 @@
 ---
 date: 2026-05-07
-status: Phase 1 spec ready (awaiting parts order + Toey equipment confirmation)
+status: Phase 1 LOCKED — all materials confirmed in hand or shipping (no further purchases)
 phase: 1 (jump height only, max accuracy)
+display: Serial (USB → laptop terminal)
+enclosure: Breadboard (Phase 1 prototype)
 ---
 
 # Jump Mat — Build Specification (Phase 1)
@@ -32,15 +34,14 @@ Path A++ — Chronopic-4 protocol-compatible switch mat
    └────────────┴────────────┘
 ```
 
-### 1.2 Materials per mat (full build)
+### 1.2 Materials per mat (full build) — actuals 2026-05-07
 
-| Item | Spec | Quantity |
-|---|---|---|
-| PCB Epoxy single-side | 20×30cm × 1.5mm FR4 | 4 sheets |
-| Foam tape 2-sided | 1.5mm thick × 1cm wide | 1 roll (5-10m) |
-| Vinyl/PVC cover | 1mm thick, 45×35cm | 1 sheet |
-| Plywood/MDF base | 5mm thick, 45×35cm | 1 sheet |
-| Anti-slip rubber feet | dome with backing | 4 pcs |
+| Item | Spec planned | Spec actual | Quantity |
+|---|---|---|---|
+| PCB Epoxy single-side | 20×30cm × 1.5mm FR4 | same | 4 sheets |
+| Foam tape 2-sided | 1.5mm thick × 1cm wide | same | 1 roll |
+| **Top cover** | Vinyl/PVC 1mm | **Industrial PVC anti-slip mat 1.5mm** (smooth bottom) — cut 40×30cm from 150×100cm sheet | 1 cut |
+| **Base** | Plywood 5mm + 4 rubber feet | **Plywood 30×60×6mm + EVA 60×40×10mm full-sheet** (replaces feet, doubles as anti-slip + damping) | 1 each |
 
 ### 1.3 Spacer pattern (foam tape on each pair)
 
@@ -62,16 +63,18 @@ Path A++ — Chronopic-4 protocol-compatible switch mat
 - 4 perimeter strips + 1 cross bar = 2 contact windows per pair
 - 4 windows total across 2 pairs
 
-### 1.4 Layer stack (top → bottom)
+### 1.4 Layer stack (top → bottom) — final
 
-| # | Layer | Why |
-|---|---|---|
-| 1 | Vinyl/PVC cover 1mm | Grip + dust protection + does not absorb impact |
-| 2 | PCB top (copper-down) | Top sensor electrode |
-| 3 | Foam tape spacer 1.5mm (grid pattern) | Keeps electrodes separated when idle |
-| 4 | PCB bottom (copper-up) | Bottom sensor electrode |
-| 5 | Plywood/MDF 5mm base | Rigid backing, prevents oscillation |
-| 6 | Rubber feet × 4 corners | Mat does not slide during jumps |
+| # | Layer | Thickness | Why |
+|---|---|---|---|
+| 1 | **Industrial PVC anti-slip mat** (cut 40×30cm) | 1.5mm | Grip + dust + tear-resistant + transmits force |
+| 2 | PCB top (copper-down) | 1.5mm | Top sensor electrode |
+| 3 | Foam tape spacer (grid pattern) | 1.5mm | Keeps electrodes separated when idle |
+| 4 | PCB bottom (copper-up) | 1.5mm | Bottom sensor electrode |
+| 5 | **Plywood 30×60×6mm** | 6mm | Rigid backing — note: Mat sits on ~half (40×30cm of 30×60cm board) |
+| 6 | **EVA mat 60×40×10mm** (full sheet under plywood) | 10mm | Anti-slip + damping + replaces 4 corner feet |
+
+**Total stack height**: ~22mm — fine for jumping
 
 ### 1.5 Solder positions
 
@@ -218,55 +221,60 @@ ESP32 VIN (5V)
 
 ---
 
-## 7. Pending Decisions (before final build)
+## 7. Decisions (locked 2026-05-07)
 
-| # | Decision | Options | Aree recommendation |
+| # | Decision | Choice | Rationale |
 |---|---|---|---|
-| 1 | Display strategy Phase 1 | Serial / BLE / OLED / hybrid | **Serial** for debug, then BLE Phase 1.5 |
-| 2 | Enclosure approach | Separate box / built-in / breadboard | **Breadboard** Phase 1, perfboard later |
-| 3 | Phase 1 deliverable | Just height value / + history app | **Just height** (per Toey's stated goal) |
+| 1 | Display strategy Phase 1 | **Serial** (USB → laptop) | Max simplicity, raw data + millis() timestamps for debugging |
+| 2 | Enclosure approach | **Breadboard** | No soldering yet, easy iteration; perfboard Phase 2 |
+| 3 | Phase 1 deliverable | **Just height value** (cm) | Per Toey's goal: max accuracy first, UX later |
+| 4 | BLE | **Phase 1.5 (deferred)** | Add after firmware logic verified via Serial |
 
 ---
 
-## 8. Equipment Checklist (Toey to confirm holdings)
+## 8. Equipment Checklist — confirmed 2026-05-07
 
-### Critical (must have)
-- [ ] Soldering iron + solder wire
-- [ ] Multimeter
-- [ ] Wire stripper or cutter
-- [ ] Cutter knife + scissors
+### Tools (✅ all in hand)
+- [x] Soldering iron + solder wire
+- [x] Multimeter
+- [x] Wire stripper / cutter / scissors / cutter knife
 
-### Components (often leftover from past projects)
-- [ ] Resistor 10kΩ × 1
-- [ ] Capacitor 100nF × 1
-- [ ] Breadboard 400 holes
-- [ ] Jumper wires dupont (M-M, M-F)
-- [ ] Hookup wire 24 AWG (red + black)
-- [ ] Heat shrink tubes
+### Components (✅ in hand or shipping)
+- [x] Resistor 10kΩ × 1
+- [x] Capacitor 100nF × 1 *(shipping)*
+- [x] Breadboard 400 holes
+- [x] Jumper wires dupont (M-M, M-F)
+- [x] Hookup wire 24 AWG (red + black)
+- [x] Heat shrink tubes
+- [x] TP4056 charging module
 
-### Mat materials (likely all new purchase)
-- [ ] PCB Epoxy 20×30cm × 4 (FR4 single-side 1.5mm)
-- [ ] Foam tape 2-sided 1.5mm
-- [ ] Vinyl/PVC sheet 1mm
-- [ ] Plywood/MDF 5mm 45×35cm
-- [ ] Rubber feet × 4
+### Power chain (✅ in hand)
+- [x] ESP32-WROOM-32 DOIT V1
+- [x] MT3608 boost
+- [x] 18650 battery + holder
+- [x] Power switch (SPDT)
 
-### Optional
-- [ ] Hand drill / Dremel (for through-hole soldering alternative)
-- [ ] Flux paste
-- [ ] Isopropyl alcohol 99% (for cleaning copper)
-- [ ] Fine sandpaper #400
+### Mat materials (✅ in hand or shipping)
+- [x] PCB Epoxy 20×30cm × 4 (FR4 single-side 1.5mm) *(shipping)*
+- [x] Foam tape 2-sided 1.5mm
+- [x] Plywood 30×60×6mm *(shipping)* — bigger than spec, fine
+- [x] EVA mat 60×40×10mm — replaces rubber feet
+- [x] Industrial PVC anti-slip mat 1.5mm (150×100cm sheet — cut piece for top)
+- [~] ~~Vinyl/PVC 1mm~~ — replaced by PVC anti-slip
+- [~] ~~Rubber feet × 4~~ — replaced by EVA full sheet
+
+### Optional (skip for now)
+- [ ] Flux paste / Isopropyl alcohol 99% / Sandpaper #400
+
+**Purchase needed: ฿0** ✅
 
 ---
 
-## 9. Cost Estimate
+## 9. Actual Cost (final)
 
-| Scenario | Range |
-|---|---|
-| Best case (have soldering iron + multimeter) | ~1,060-1,860฿ |
-| Worst case (need to buy everything) | ~1,660-3,160฿ |
+**฿0 additional purchase** — all materials already in hand or in transit.
 
-(Toey already has: ESP32 WROOM-32, MT3608, 18650, holder, switch — saves ~600-900฿)
+(Saved by reusing existing PVC anti-slip mat for top cover and EVA sheet for base — replaces vinyl + rubber feet from original spec.)
 
 ---
 

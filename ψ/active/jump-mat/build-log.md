@@ -4,6 +4,51 @@ Append-only chronological log. Newest entries at top.
 
 ---
 
+## 2026-05-07 (evening) — Day 3: Materials locked + firmware skeleton
+
+**Status**: Phase 1 ready to build when shipped parts arrive
+**Active session**: Aree (with Toey)
+
+### Done today
+- Confirmed all materials in hand or shipping (zero additional purchase needed)
+- Material substitutions finalized:
+  - Top cover: vinyl 1mm → **industrial PVC anti-slip mat 1.5mm** (Toey already had 150×100cm sheet)
+  - Base: rubber feet × 4 → **EVA mat 60×40×10mm full-sheet** under plywood (anti-slip + damping in one)
+  - Plywood: 45×35×5mm spec → **30×60×6mm** (bigger and stiffer, no issue)
+- Phase 1 decisions locked: **Serial output + breadboard prototype**
+- BLE deferred to Phase 1.5 (after Serial validation)
+- Updated `hardware/build-spec.md` with actuals (sections 1.2, 1.4, 7, 8, 9)
+- **Wrote firmware skeleton** at `firmware/jumpmat_phase1.ino`
+  - Single sensor on GPIO 4 (2 PCB pairs wired in parallel = appears as 1 contact)
+  - External 10kΩ pull-up + 100nF noise filter (per build spec)
+  - Polling + software debounce 10ms (simpler than reference's hw_timer interrupts)
+  - 100ms flight threshold (VALD SmartJump pattern)
+  - Output: `Jump #N | Flight: 0.XXX s | Height: XX.X cm`
+  - Onboard LED (GPIO 2) shows mat state (HIGH = on mat)
+- Wrote `firmware/README.md` with flash instructions + test plan + calibration procedure
+
+### Setup work (parallel, this session)
+- Pulled cross-instance handoff from VS Code extension (`2d22c86`)
+- Updated Oracle skills `standard` (13) → `full` (42)
+- Added MCP servers: **Context7** (library docs) + **Playwright** (browser automation)
+- Removed broken `oracle-v2` MCP entry (was misconfigured as stdio — actually HTTP server)
+- Updated `CLAUDE.md` Installed Skills + MCP sections
+
+### Pending Toey before parts arrival
+- Nothing required — all materials confirmed, firmware ready
+
+### Next session (when PCBs / capacitor / plywood arrive)
+1. Solder wires to PCB corners (per build-spec section 1.5 diagonal pattern)
+2. Apply foam tape grid spacer (perimeter + cross bar = 2 windows per pair)
+3. Assemble layer stack on plywood + EVA base + PVC top cover
+4. Breadboard ESP32 + 10kΩ + 100nF + power chain
+5. Adjust MT3608 to 5V output (BEFORE connecting to ESP32)
+6. Flash `jumpmat_phase1.ino`
+7. Run test plan (build-spec section 6 + firmware/README.md)
+8. Calibrate against phone slow-mo 240fps
+
+---
+
 ## 2026-05-07 — Day 2/3: Build spec finalized
 
 **Status**: Phase 1 spec ready, awaiting parts order + Toey equipment confirmation
