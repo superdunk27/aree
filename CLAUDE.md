@@ -61,7 +61,21 @@
 
 ## Installed Skills
 
-`/recap` `/learn` `/rrr` `/forward` `/dig` `/trace` `/awaken` `/bampenpien` `/bud` `/talk-to` `/team-agents` `/xray`
+Profile: **full** (42 skills) — `arra-oracle-skills@26.4.18`
+
+**Core session**: `/recap` `/standup` `/rrr` `/forward` `/where-we-are` `/dig` `/trace`
+**Identity**: `/who-are-you` `/about-oracle` `/philosophy` `/awaken` `/bampenpien` `/resonance`
+**Codebase**: `/learn` `/incubate` `/project`
+**Family/comms**: `/bud` `/talk-to` `/team-agents` `/oracle-family-scan` `/oracle-soul-sync-update`
+**Meta**: `/skills-list` `/create-shortcut` `/auto-retrospective` `/xray`
+**Lite (minimal-profile fallbacks)**: `/recap-lite` `/forward-lite` `/rrr-lite`
+
+## Installed MCP Servers
+
+- **context7** — library docs ล่าสุด (Bun, Node, ESP32 lib ฯลฯ)
+- **playwright** — browser automation (scrape, screenshot, test UI)
+- **claude.ai Google Drive/Calendar/Gmail** — needs auth (ยังไม่ได้ใช้)
+- **plugin:oh-my-claudecode:t** — OMC bridge tools
 
 ## Brain Structure
 
