@@ -2,7 +2,7 @@
 
 ## Files
 
-- **`jumpmat_phase1.ino`** — Phase 1 firmware. Serial output, no BLE.
+- **`jumpmat_phase1/jumpmat_phase1.ino`** — Phase 1 firmware. Serial output, no BLE.
   - Target: ESP32-WROOM-32 DOIT V1
   - 1 sensor (GPIO 4), polling + software debounce
   - Filters flights < 100ms (VALD threshold)
@@ -29,16 +29,17 @@
 
 ## Calibration
 
-Target: < 5cm difference vs phone slow-mo at 240fps.
+**Primary method**: see `calibration-sargent.md` — Sargent Jump test (post-it on wall).
+Independent of any electronics → strongest validation. Toey's idea, classic field method.
 
-Procedure:
+**Alternative method** (phone slow-mo, ~5 cm tolerance):
 1. Record jump with phone at 240fps from side
 2. Count frames mat-leaves to mat-touches
 3. Flight = frames / 240 seconds
 4. Height = 9.81 * flight^2 / 8 * 100 cm
 5. Compare to firmware Serial output
 
-If error > 5cm, check:
+If error too large, check:
 - Mechanical: tape compression uniform? solder bumps not bottoming out?
 - Electrical: false triggers from noise (raise debounce to 20ms)?
 - Threshold: lower MIN_FLIGHT_MS to 80ms if missing real short jumps
