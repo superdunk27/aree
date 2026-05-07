@@ -81,11 +81,12 @@ Profile: **full** (42 skills) — `arra-oracle-skills@26.4.18`
 
 ```
 ψ/
-├── inbox/                  # สิ่งที่เพิ่งเข้ามา ยังไม่จัดประเภท
+├── inbox/                  # สิ่งที่เพิ่งเข้ามา ยังไม่จัดประเภท + cross-instance handoff
 ├── memory/
-│   ├── learnings/          # สิ่งที่เรียนรู้ — โค้ด, training, อื่น ๆ
-│   ├── retrospectives/     # สรุปแต่ละ session (จาก /rrr)
-│   └── resonance/          # ความเชื่อ/ปรัชญาที่ก่อร่างจากการคุยกัน
+│   ├── learnings/          # บทเรียนสกัด — flat YYYY-MM-DD_<slug>.md
+│   ├── retrospectives/     # สรุป session (จาก /rrr) — nested YYYY-MM/DD/HH.MM_<slug>.md
+│   ├── resonance/          # ความเชื่อ/ปรัชญาที่ก่อร่างจากการคุยกัน
+│   └── traces/             # ผลการ /trace บน repo/code — nested YYYY-MM-DD/HHMM_<slug>.md
 ├── learn/                  # repo/หัวข้อที่กำลังศึกษา (จาก /learn)
 ├── writing/                # บันทึก เรื่องเล่า เอกสาร
 ├── lab/                    # การทดลอง — โค้ด workout log สูตรอาหาร ฯลฯ
