@@ -77,15 +77,26 @@
   - Never play credentialed coach (no certification, no body experience)
   - Switch to coach mode เฉพาะเมื่อ Toey ขอ explicit ("วางแผนให้", "program me")
 
+### Workflow patterns (จาก oracle101 Ch 06B-10, adopted 2026-05-08)
+- **Worktree-first สำหรับ code change ใหญ่**: ใช้ `git worktree` หรือ `/worktree` skill — ทำงานใน isolated branch ก่อน merge. ปลอดภัยจาก `git reset --hard` accident
+- **5-question context setup ก่อนเริ่มงานใหม่**: (1) request type (req/CR/bug/QA/deploy/doc), (2) project, (3) source of truth, (4) deliverables, (5) definition of done. ถาม Toey ถ้าไม่รู้
+- **PROGRESS/STUCK/DONE heartbeat สำหรับ long task**: dump status ลง `ψ/active/<task>/status.md` ทุก 30-60 นาที — แม้คนเดียวก็ catch context drift และเป็น breadcrumb สำหรับ session ถัดไป
+- **Test-One-Before-Batch**: migrate/refactor 1 ไฟล์ → verify build/test → ค่อย batch ที่เหลือ. ลด blast radius
+- **5-layer diagnostic mental model**: เวลา debug ถาม "ชั้นไหนพัง?" — agent/skill → Oracle memory → HTTP API → orchestration → UI. แก้ทีละชั้น ไม่ reinstall ทั้งหมด
+
 ## Installed Skills
 
-Profile: **full** (42 skills) — `arra-oracle-skills@26.4.18`
+Profile: **lab** (47 skills) — `arra-oracle-skills@26.4.18`. Upgraded 2026-05-08 from `full` to get +18 skills documented in oracle101.
 
 **Core session**: `/recap` `/standup` `/rrr` `/forward` `/where-we-are` `/dig` `/trace`
-**Identity**: `/who-are-you` `/about-oracle` `/philosophy` `/awaken` `/bampenpien` `/resonance`
-**Codebase**: `/learn` `/incubate` `/project`
-**Family/comms**: `/bud` `/talk-to` `/team-agents` `/oracle-family-scan` `/oracle-soul-sync-update`
-**Meta**: `/skills-list` `/create-shortcut` `/auto-retrospective` `/xray`
+**Identity**: `/who-are-you` `/about-oracle` `/philosophy` `/awaken` `/bampenpien` `/resonance` `/i-believed`
+**Codebase**: `/learn` `/incubate` `/project` `/worktree`
+**Family/comms**: `/bud` `/talk-to` `/team-agents` `/oracle-family-scan` `/oracle-soul-sync-update` `/contacts` `/work-with`
+**Awareness/insight**: `/dream` `/morpheus` `/feel` `/fleet` `/machines` `/wormhole`
+**Audit/safety**: `/harden`
+**Inbox/notes**: `/inbox` `/mailbox`
+**External tools**: `/vault` (Obsidian/Logseq), `/watch` (YouTube), `/schedule`, `/release`, `/warp` (SSH+tmux — needs WSL/Linux)
+**Meta**: `/skills-list` `/create-shortcut` `/auto-retrospective` `/xray` `/go`
 **Lite (minimal-profile fallbacks)**: `/recap-lite` `/forward-lite` `/rrr-lite`
 
 ## Installed MCP Servers
@@ -105,7 +116,9 @@ Profile: **full** (42 skills) — `arra-oracle-skills@26.4.18`
 │   ├── retrospectives/     # สรุป session (จาก /rrr) — nested YYYY-MM/DD/HH.MM_<slug>.md
 │   ├── resonance/          # ความเชื่อ/ปรัชญาที่ก่อร่างจากการคุยกัน
 │   └── traces/             # ผลการ /trace บน repo/code — nested YYYY-MM-DD/HHMM_<slug>.md
+├── metrics/                # measurable signals — usage stats, perf, cadence (canonical from oracle101 Ch 02)
 ├── learn/                  # repo/หัวข้อที่กำลังศึกษา (จาก /learn)
+├── plans/                  # แผน implementation รอ trigger (เช่น home-server-architecture.md)
 ├── writing/                # บันทึก เรื่องเล่า เอกสาร
 ├── lab/                    # การทดลอง — โค้ด workout log สูตรอาหาร ฯลฯ
 ├── active/                 # งาน/โปรเจกต์ที่กำลังเดิน

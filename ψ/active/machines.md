@@ -42,35 +42,51 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 - `oracle-v2` MCP — never installed here (was broken on the other machine, removed there)
 - Chronojump — not installed here (deprioritized 2026-05-07 due to UX)
 
+### Pending sync (on next visit)
+- **Skills**: upgrade `full (42)` → `lab (47)` via `npx -y arra-oracle-skills@26.4.18 install -g -y -p lab` to match TOEY (home). +18 skills: `/contacts`, `/dream`, `/feel`, `/fleet`, `/harden`, `/i-believed`, `/inbox`, `/machines`, `/mailbox`, `/morpheus`, `/release`, `/schedule`, `/vault`, `/warp`, `/watch`, `/work-with`, `/worktree`, `/wormhole`. See `ψ/memory/learnings/2026-05-08_oracle101-gap-review.md` for context.
+- **CLAUDE.md changes**: pulled via `git pull` automatically — Workflow patterns subsection + Brain Structure (added `metrics/`, `plans/`).
+
 ### History
 - **2026-05-08 09:30–09:45** — Sync from machine-2026-05-07: skills standard→full, +context7 +playwright MCP, arduino-cli 1.4.1 + ESP32 core 3.3.8
 - **2026-05-08 ~16:00** — Web research stack expansion: +Firecrawl MCP (smoke-tested vs Jina-blocked PMC paper, scraped 269KB content successfully), documented NCBI E-utilities pattern. Filled the gap surfaced during morning's strength-for-swim-sprint research where Jina banned PMC anonymous access.
 
 ---
 
-## machine-2026-05-07 (hostname TBD)
+## TOEY
 
-**Aliased**: (Toey's machine used 2026-05-07 — hostname to be confirmed next time it's used)
-**OS**: Windows 11 (assumed — uses winget)
-**Last-updated**: 2026-05-07 22:58 GMT+7
+**Aliased**: Toey's home machine (hostname confirmed 2026-05-08 — was previously "machine-2026-05-07 hostname TBD")
+**OS**: Windows 11 Pro 10.0.26200
+**User**: toey0
+**Last-updated**: 2026-05-08 ~22:30 GMT+7 (skills full→lab, MCP audit, hostname confirmed)
 
-### Current state (reconstructed from retro)
+### Current state
 
 | Layer | Value |
 |---|---|
-| Node | ✅ (version not recorded) |
-| Bun | ✅ |
-| Oracle skills | full (42) — `arra-oracle-skills@26.4.18` |
-| MCP servers | `context7`, `playwright`, `plugin:oh-my-claudecode:t` |
-| arduino-cli | 1.4.1 |
-| ESP32 core | installed (~200MB+) |
-| Chronojump | installed → deprioritized (UX too clunky) |
+| Node | v24.14.1 |
+| Bun | 1.3.13 |
+| npx | 11.11.0 |
+| winget | v1.28.240 |
+| Oracle skills | **lab (47)** — `arra-oracle-skills@26.4.18` (upgraded today from 29 actual / "full" claim) |
+| MCP servers | `context7` ✓, `playwright` ✓, `firecrawl` ✓, `plugin:oh-my-claudecode:t` ✓ |
+| MCP claude.ai | Google Drive / Calendar / Gmail (needs auth — not used yet) |
+| arduino-cli | 1.4.1 (`C:\Program Files\Arduino CLI\arduino-cli.exe`) |
+| ESP32 core | esp32:esp32 3.3.8 |
+| Chronojump | installed → deprioritized (UX too clunky, dropped 2026-05-07) |
+| yt-dlp | NOT installed (needed for `/watch` skill — install if/when used) |
+| ffmpeg | NOT installed |
 
 ### Removed / Excluded
 - `oracle-v2` MCP — removed 2026-05-07 (was misconfigured as stdio, actually HTTP — broken)
 
+### Gaps vs DESKTOP-CE4H6GT (work machine)
+- ✅ **Firecrawl MCP** — installed 2026-05-08. Now matches work machine. API key stored in `~/.claude.json` env (per-machine, not in repo).
+- ⚠️ Skills count differs: TOEY = lab (47), DESKTOP = full (42). On next work-machine session, propose upgrade DESKTOP → lab (47) so both match. Tracked in DESKTOP's "Pending sync" section above.
+
 ### History
 - **2026-05-07 evening** — Day 3 jump mat work session. Setup expansion: skills standard→full, MCP +context7 +playwright -oracle-v2, arduino-cli + ESP32 core via winget. Documented in `ψ/memory/retrospectives/2026-05/07/22.29_jump-mat-day3-setup-firmware-validators.md`.
+- **2026-05-08 ~22:30** — Hostname confirmed = TOEY (was TBD). Skills upgraded full→lab via `npx arra-oracle-skills@26.4.18 install -g -y -p lab` (29→47, +18 skills documented in `ψ/memory/learnings/2026-05-08_oracle101-gap-review.md`). ψ/metrics/ created. CLAUDE.md updated with workflow patterns from oracle101 Ch 06B-10.
+- **2026-05-08 ~22:45** — Firecrawl MCP installed (matched DESKTOP-CE4H6GT). Local skill `.claude/skills/sync.md` created — typing `sync` or `/sync` in any session triggers cross-machine state check + propose alignment.
 
 ---
 
