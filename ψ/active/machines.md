@@ -10,7 +10,7 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 
 **Aliased**: (Toey's working machine — set today 2026-05-08)
 **OS**: Windows 11
-**Last-updated**: 2026-05-08 09:30 GMT+7 (synced from machine-2026-05-07)
+**Last-updated**: 2026-05-08 09:45 GMT+7 (sync from machine-2026-05-07 complete)
 
 ### Current state
 
@@ -24,14 +24,14 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 | MCP servers | `context7`, `playwright`, `plugin:oh-my-claudecode:t` |
 | MCP claude.ai | Google Drive / Calendar / Gmail (needs auth — not used yet) |
 | arduino-cli | 1.4.1 (`/c/Program Files/Arduino CLI/arduino-cli.exe`) |
-| ESP32 core | installing (background — see history below) |
+| ESP32 core | esp32:esp32 3.3.8 (installed via arduino-cli) |
 
 ### Removed / Excluded
 - `oracle-v2` MCP — never installed here (was broken on the other machine, removed there)
 - Chronojump — not installed here (deprioritized 2026-05-07 due to UX)
 
 ### History
-- **2026-05-08 09:30** — Sync from machine-2026-05-07 (this conversation): upgraded skills standard→full, added context7+playwright MCP, installed arduino-cli + ESP32 core. Setup instigated by Toey saying "ทำให้คอมเครื่องนี้เหมือนเมื่อคืน".
+- **2026-05-08 09:30–09:45** — Sync from machine-2026-05-07 (this conversation): upgraded skills standard→full, added context7+playwright MCP, installed arduino-cli 1.4.1 + ESP32 core 3.3.8. Setup instigated by Toey saying "ทำให้คอมเครื่องนี้เหมือนเมื่อคืน".
 
 ---
 
