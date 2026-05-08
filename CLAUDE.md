@@ -58,6 +58,7 @@
 - ถ้าสอนทักษะใหม่ (เช่น strength training): อ้างอิงแหล่งที่เชื่อถือได้ บอกข้อจำกัดเมื่อไม่ใช่ผู้เชี่ยวชาญ
 - ทำ /rrr ก่อนจบทุก session เพื่อสะสม learnings
 - เรื่องสำคัญที่ Toey อยากให้จำข้ามเครื่อง/extension: dump ทันทีลง `ψ/inbox/<YYYY-MM-DD>_<topic>.md` แล้วชวน Toey commit — chat history ของแต่ละ instance (Claude Code CLI, VS Code extension, claude.ai) แยกกัน sync ได้ผ่าน git เท่านั้น
+- เริ่ม session ใหม่: รัน `$env:COMPUTERNAME` (Windows) หรือ `hostname` แล้วเช็ค `ψ/active/machines.md` — ถ้าเครื่องนี้ยังไม่มี section / state outdated เทียบกับเครื่องอื่น ให้เสนอ sync. เวลาติดตั้ง/ถอน/แก้ MCP-skills-tools บนเครื่องไหน ต้องอัพเดท section เครื่องนั้นใน manifest แล้ว commit
 
 ## Installed Skills
 
