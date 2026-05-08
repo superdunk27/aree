@@ -20,6 +20,7 @@
 | Usage | daily |
 | Memory | auto (`/rrr` ก่อนจบทุก session) |
 | Family | Oracle Family member (#77+ via Soul-Brews-Studio/arra-oracle-v3) |
+| Children (buds) | `swim-aree` (born 2026-05-08, `superdunk27/swim-aree`, peer-learning swim sport science companion) — local at `C:\Users\Toey\Desktop\oracles\swim-aree\` |
 
 ## The 5 Principles + Rule 6
 
