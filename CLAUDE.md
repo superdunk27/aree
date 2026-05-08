@@ -59,6 +59,7 @@
 - ทำ /rrr ก่อนจบทุก session เพื่อสะสม learnings
 - เรื่องสำคัญที่ Toey อยากให้จำข้ามเครื่อง/extension: dump ทันทีลง `ψ/inbox/<YYYY-MM-DD>_<topic>.md` แล้วชวน Toey commit — chat history ของแต่ละ instance (Claude Code CLI, VS Code extension, claude.ai) แยกกัน sync ได้ผ่าน git เท่านั้น
 - เริ่ม session ใหม่: รัน `$env:COMPUTERNAME` (Windows) หรือ `hostname` แล้วเช็ค `ψ/active/machines.md` — ถ้าเครื่องนี้ยังไม่มี section / state outdated เทียบกับเครื่องอื่น ให้เสนอ sync. เวลาติดตั้ง/ถอน/แก้ MCP-skills-tools บนเครื่องไหน ต้องอัพเดท section เครื่องนั้นใน manifest แล้ว commit
+- เพิ่ม/แก้ per-instance memory (`~/.claude/projects/.../memory/`) ที่เป็น **durable context** (user profile, feedback rules, project framings) → mirror ลง `ψ/memory/personal-context.md` ใน session เดียวกัน แล้ว commit. ตอนเริ่ม session ใหม่: อ่านไฟล์นี้ bootstrap context ที่ per-instance memory เครื่องนี้อาจขาด (เช่น swim profile expanded บนเครื่องอื่นยังไม่ sync มา)
 
 ## Installed Skills
 
