@@ -4,6 +4,32 @@ Append-only chronological log. Newest entries at top.
 
 ---
 
+## 2026-05-08 (morning) — Day 3.5: Phase 1.5 BLE design + new machine sync
+
+**Status**: Phase 1 unchanged (still waiting on parts). Phase 1.5 design locked.
+**Active session**: Aree (with Toey)
+
+### Done today
+- Sync from machine-2026-05-07 to DESKTOP-CE4H6GT — both machines now identical (skills full, context7+playwright MCP, arduino-cli 1.4.1, ESP32 core 3.3.8)
+- Created `ψ/active/machines.md` cross-instance state manifest + CLAUDE.md sync rule
+- Smoke-tested context7 + playwright MCP — both pass
+- **Wrote `firmware/phase15-ble-design.md`** — Phase 1.5 BLE port design doc, no code yet
+  - Decision: clone Chronopic-4 UUIDs (compat with existing Chronojump desktop client + nRF Connect)
+  - Library: `h2zero/NimBLE-Arduino` (50% less flash, 100KB less RAM than bluedroid)
+  - Service map simplified: 1 sensor (Chronopic-4 has 4), no IR commands, no NeoPixel commands
+  - Command set: keep `get_version, start/end_capture, set_debounce, get_battery_level, setBLEName, restart`. Drop IR/sync/RGB/AND-OR commands.
+  - Trigger: code Phase 1.5 only after Phase 1 passes Sargent calibration
+
+### Pending Toey
+- Nothing (waiting on parts)
+
+### Next session
+1. Wait for parts (PCB×4, capacitor 100nF, plywood)
+2. Day 4 build: solder + assemble + flash Phase 1 + Sargent calibrate
+3. If Phase 1 passes: code Phase 1.5 from design doc (~2-3 hr est.)
+
+---
+
 ## 2026-05-07 (evening) — Day 3: Materials locked + firmware skeleton
 
 **Status**: Phase 1 ready to build when shipped parts arrive
