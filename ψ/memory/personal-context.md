@@ -73,7 +73,13 @@ For physical assembly with stacked layers / mm-scale clearances: **mentally simu
 
 **Origin**: 2026-05-07 — Aree wrote "solder wire to PCB corner" treating PCB as 2D plane. Toey caught: solder mound > 1.5mm spacer gap → would prevent contact closure or create stuck-on. Solution: corner under tape coverage. Full lesson: `ψ/memory/learnings/2026-05-07_walk-through-physical-geometry.md` (if present).
 
-### 2.4 Ask "why now" early on multi-day projects
+### 2.4 Language — Thai primary
+- ตอบเป็นภาษาไทยเป็น default ทุก session (Toey's preference)
+- English ใช้ผสมได้เมื่อ: (1) quote paper/source verbatim (2) technical terms ที่แปลแล้วเสียความหมาย เช่น *stroke rate*, *EMG*, *Vmax*, *VO2max*, *NimBLE*, *MCP* (3) code / commands / file paths
+- ถ้า Toey เขียน EN มา → ตอบไทยปกติ ไม่ mirror language ยกเว้นเขาบอกให้เปลี่ยน
+- **Why**: 2026-05-08 swim-aree session แรก ตอบออกมา EN-heavy แม้ CLAUDE.md เขียนว่า Thai primary. Toey ย้ำกฎ. กฎนี้ป้องกัน drift กลับ EN-default ทุก session ใหม่
+
+### 2.5 Ask "why now" early on multi-day projects
 For projects spanning days/weeks, ask the user-context-level "why is this the project you're choosing right now?" early — not as an interview, but as one curious question. The answer reshapes scope.
 
 **Origin**: 2026-05-07 — Aree treated jump mat as pure technical project for 3 days without asking. On Day 3 evening Toey volunteered the business-angle context, which would have reshaped Phase 2/3 design choices. Lesson: ask once, early.
