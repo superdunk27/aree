@@ -10,7 +10,7 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 
 **Aliased**: (Toey's working machine — set today 2026-05-08)
 **OS**: Windows 11
-**Last-updated**: 2026-05-08 09:45 GMT+7 (sync from machine-2026-05-07 complete)
+**Last-updated**: 2026-05-08 ~16:00 GMT+7 (added Firecrawl MCP + documented PubMed E-utilities)
 
 ### Current state
 
@@ -21,17 +21,30 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 | npx | 11.9.0 |
 | winget | v1.28.240 |
 | Oracle skills | full (42) — `arra-oracle-skills@26.4.18` |
-| MCP servers | `context7`, `playwright`, `plugin:oh-my-claudecode:t` |
+| MCP servers | `context7`, `playwright`, `firecrawl`, `plugin:oh-my-claudecode:t` |
 | MCP claude.ai | Google Drive / Calendar / Gmail (needs auth — not used yet) |
 | arduino-cli | 1.4.1 (`/c/Program Files/Arduino CLI/arduino-cli.exe`) |
 | ESP32 core | esp32:esp32 3.3.8 (installed via arduino-cli) |
+| Web research APIs | NCBI E-utilities (curl, no key, free) |
+
+### Web research stack (2026-05-08)
+| Tool | Type | Auth | Use case |
+|---|---|---|---|
+| Jina Reader | curl `r.jina.ai/<url>` | none | Default for non-PMC web content |
+| Firecrawl MCP | `firecrawl_scrape` / `firecrawl_search` | API key in `~/.claude.json` env | PMC, paywalls, JS-rendered pages, anywhere Jina is blocked |
+| Context7 MCP | `context7__query-docs` | none | Library docs (Bun, NimBLE, etc.) |
+| Playwright MCP | `playwright__browser_*` | none | Full browser automation, screenshots |
+| WebSearch | Anthropic built-in | none | Source discovery |
+| WebFetch | Anthropic built-in | none | Tier 6 only — page overview, NEVER for technical content |
+| NCBI E-utilities | curl `eutils.ncbi.nlm.nih.gov/entrez/eutils/...` | none | Medical / sport science papers (esearch, efetch, esummary) |
 
 ### Removed / Excluded
 - `oracle-v2` MCP — never installed here (was broken on the other machine, removed there)
 - Chronojump — not installed here (deprioritized 2026-05-07 due to UX)
 
 ### History
-- **2026-05-08 09:30–09:45** — Sync from machine-2026-05-07 (this conversation): upgraded skills standard→full, added context7+playwright MCP, installed arduino-cli 1.4.1 + ESP32 core 3.3.8. Setup instigated by Toey saying "ทำให้คอมเครื่องนี้เหมือนเมื่อคืน".
+- **2026-05-08 09:30–09:45** — Sync from machine-2026-05-07: skills standard→full, +context7 +playwright MCP, arduino-cli 1.4.1 + ESP32 core 3.3.8
+- **2026-05-08 ~16:00** — Web research stack expansion: +Firecrawl MCP (smoke-tested vs Jina-blocked PMC paper, scraped 269KB content successfully), documented NCBI E-utilities pattern. Filled the gap surfaced during morning's strength-for-swim-sprint research where Jina banned PMC anonymous access.
 
 ---
 

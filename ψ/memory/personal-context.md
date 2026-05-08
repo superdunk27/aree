@@ -42,23 +42,31 @@ Mirror of durable Toey-context from per-instance memory (`~/.claude/projects/...
 
 **Why**: Aree was born 2026-05-04 with limited knowledge. Toey is deliberately seeding the brain so future sessions compound. Personal-context questions in research-mode derail the goal — they jump into prescription and treat Toey's body as the unit of analysis instead of the subject domain.
 
-### 2.2 Web research — Jina Reader > WebFetch (for technical content)
+### 2.2 Web research — tiered tools by content type
 WebFetch returns lossy AI summaries — different each call, hallucination-prone. For anything technical:
 
 | Tier | Content type | Method |
 |------|--------------|--------|
-| 1 | Technical step-by-step, spec, construction guide, decision input | `curl https://r.jina.ai/<url>` → Read → cite verbatim |
+| 1A | **Medical / sport science / biomedical papers** | NCBI E-utilities (free, no key) — `esearch.fcgi?db=pubmed&term=...` → `efetch.fcgi?id=...&rettype=abstract&retmode=text` |
+| 1B | Technical web content (docs, blogs, guides, non-PMC papers) | `curl https://r.jina.ai/<url>` → Read → cite verbatim |
+| 1C | **Jina-blocked / paywall / JS-rendered / rate-limited** | Firecrawl MCP (`firecrawl_scrape` w/ `formats: ["markdown"]`) — works on PMC, paywalls, etc |
 | 2 | Source code | `gh` CLI or raw URL → Read |
 | 3 | PDF | Read tool directly |
 | 4 | Image-heavy page | ask Toey for screenshot |
-| 5 | Paywall / login | ask Toey to paste |
+| 5 | Paywall behind login (Firecrawl can't either) | ask Toey to paste |
 | 6 | Overview / "what's this site about" | WebFetch OK |
 
-**Always tag** when quoting numbers/specs: "from Jina (raw)" or "from WebFetch (summary)" — transparency for Toey to gauge trust level.
+**Search vs fetch** (different tools for different jobs):
+- Discovery / "find papers about X" → `WebSearch` (Anthropic) or `firecrawl_search` (better for technical relevance) or `esearch` for PubMed
+- Fetch known URL → tier table above
+
+**Always tag** when quoting numbers/specs: "from Jina (raw)" / "from PubMed efetch" / "from Firecrawl scrape" / "from WebFetch (summary)" — transparency for Toey to gauge trust level.
 
 **Red flags** (stop and verify): WebFetch summarizes differently between two calls; image-heavy page where AI clearly didn't see images; step-by-step where order matters → never use summary.
 
-**Origin**: 2026-05-06 — Aree explained Chronojump rod-style wrong 3 times because WebFetch summary differed each call. Jina Reader pulled raw text → answered correctly first try.
+**Tool history**:
+- 2026-05-06: Jina Reader adopted (Aree explained Chronojump rod-style wrong 3 times via WebFetch summary; Jina raw text fixed it)
+- 2026-05-08: Firecrawl MCP added on DESKTOP-CE4H6GT — fills gap when Jina is blocked (e.g., PMC banned Jina anonymous-access during strength research). PubMed E-utilities documented as Tier 1A — official NIH API, free, no key, no rate-limit issues
 
 ### 2.3 Hardware — walk through 3D geometry concretely
 For physical assembly with stacked layers / mm-scale clearances: **mentally simulate the 3D assembly before describing**. Solder mounds (1–2mm), wire heights, foam compression, tape thickness — schematic abstraction misses real failure modes.
