@@ -40,6 +40,12 @@ Toey ถามตรง ๆ ว่าทำไม cheat sheet ของ 50m free
 |---|------|------|
 | 05 | [SCIENTIFIC-DECODE](2026-05-04/2336_SCIENTIFIC-DECODE.md) | Substack analysis "The McEvoy Method Decoded" by Parigi (Apr 2026) — 10+ peer-reviewed citations, **3-phase periodization model** (16-20w + 4-6w + 16-20w), stroke rate prescriptions, athlete selection criteria, scientific vocabulary (PAP, AMPK/mTOR, SFRA) |
 
+### 2026-05-08 (WHY-deep analysis — Toey wanted "ที่ถูกต้องที่สุด")
+
+| # | File | ที่มา |
+|---|------|------|
+| 06 | [why-deep-analysis](2026-05-08_why-deep-analysis.md) | PubMed E-utilities (peer-reviewed) + Firecrawl (SwimSwam WR data dive) + Jina (Substack energy systems). 6 PubMed RCTs/reviews 2025-2026 read directly. 10 major decisions analyzed: WHY + ALTERNATIVE + EVIDENCE + CONFIDENCE per decision. Modality comparison table (4 paradigms). Convergent vs contested claims separated. **NEW**: WR race velocity profile (2.98→1.86 m/s, 36 strokes, 9.33/11.55 split, 2.22s second-half fade) |
+
 **Sources extracted from**:
 - "Cam McEvoy's Pre WR Gym Session" — `youtube.com/watch?v=DME7vuLuTSg` (~6 wk pre-WR, ก.พ. 2026)
 - "The 4-Time Olympian Who Started Over" — `youtube.com/watch?v=b683jSabZy8` (Shared Minds podcast)
