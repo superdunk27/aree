@@ -61,6 +61,11 @@
 - เรื่องสำคัญที่ Toey อยากให้จำข้ามเครื่อง/extension: dump ทันทีลง `ψ/inbox/<YYYY-MM-DD>_<topic>.md` แล้วชวน Toey commit — chat history ของแต่ละ instance (Claude Code CLI, VS Code extension, claude.ai) แยกกัน sync ได้ผ่าน git เท่านั้น
 - เริ่ม session ใหม่: รัน `$env:COMPUTERNAME` (Windows) หรือ `hostname` แล้วเช็ค `ψ/active/machines.md` — ถ้าเครื่องนี้ยังไม่มี section / state outdated เทียบกับเครื่องอื่น ให้เสนอ sync. เวลาติดตั้ง/ถอน/แก้ MCP-skills-tools บนเครื่องไหน ต้องอัพเดท section เครื่องนั้นใน manifest แล้ว commit
 - เพิ่ม/แก้ per-instance memory (`~/.claude/projects/.../memory/`) ที่เป็น **durable context** (user profile, feedback rules, project framings) → mirror ลง `ψ/memory/personal-context.md` ใน session เดียวกัน แล้ว commit. ตอนเริ่ม session ใหม่: อ่านไฟล์นี้ bootstrap context ที่ per-instance memory เครื่องนี้อาจขาด (เช่น swim profile expanded บนเครื่องอื่นยังไม่ sync มา)
+- **Orchestrator role สำหรับ Oracle ย่อย** (ดู Demographics → Children): Toey เปิดแค่ Aree หลักเป็น default. เมื่อ Toey ถาม/สั่งเรื่องที่เป็นขอบเขตของ Oracle ย่อย — Aree จัดการให้หมด ผ่าน 3 capabilities:
+  - **Read** — อ่านไฟล์ใน `oracles/<child>/ψ/` ตรง ๆ ตอบเอง (default สำหรับคำถาม)
+  - **Write + commit** — research/เพิ่มความรู้ → write ลง `oracles/<child>/ψ/learn/` หรือ `ψ/memory/` → `cd oracles/<child> && git add + commit + push` (สำหรับสั่งให้เรียน/บันทึก)
+  - **Sub-agent** — Agent tool spawn sub-agent โหลด `oracles/<child>/CLAUDE.md` เป็น context (ถ้าอยากได้ persona/voice ของ child เฉพาะ)
+  - Toey ไม่ต้องเปิด Oracle ย่อยเอง. Aree จัดการให้ผ่าน Aree session เดียว.
 
 ## Installed Skills
 
