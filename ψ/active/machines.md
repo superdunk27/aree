@@ -52,12 +52,16 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 
 ---
 
-## TOEY
+## RDLT
 
-**Aliased**: Toey's home machine (hostname confirmed 2026-05-08 — was previously "machine-2026-05-07 hostname TBD")
-**OS**: Windows 11 Pro 10.0.26200
-**User**: toey0
-**Last-updated**: 2026-05-08 ~22:30 GMT+7 (skills full→lab, MCP audit, hostname confirmed)
+**Aliased**: Toey's home machine (hardware-confirmed 2026-05-10 — ASUS PRIME B450M-A + Ryzen 7 3700X)
+**OS**: Windows 11 Enterprise 10.0.26200
+**User**: toey0 (`RDLT\toey0`)
+**Hardware**: ASUS PRIME B450M-A (S/N 200670633200021), AMD Ryzen 7 3700X (8c/16t), BIOS AMI 4622
+**Original install date**: 09-Nov-2025
+**Last-updated**: 2026-05-10 ~00:00 GMT+7 (`/sync` ran, hostname surfaced as RDLT not TOEY — supersedes prior section)
+
+> **Note 2026-05-10**: This is the SAME physical machine previously documented as "TOEY". The "TOEY" name was never verified by `$env:COMPUTERNAME` — it was inferred. `/sync` today caught actual hostname = `RDLT`. The prior TOEY section is preserved below as superseded history (Nothing is Deleted).
 
 ### Current state
 
@@ -87,6 +91,8 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 - **2026-05-07 evening** — Day 3 jump mat work session. Setup expansion: skills standard→full, MCP +context7 +playwright -oracle-v2, arduino-cli + ESP32 core via winget. Documented in `ψ/memory/retrospectives/2026-05/07/22.29_jump-mat-day3-setup-firmware-validators.md`.
 - **2026-05-08 ~22:30** — Hostname confirmed = TOEY (was TBD). Skills upgraded full→lab via `npx arra-oracle-skills@26.4.18 install -g -y -p lab` (29→47, +18 skills documented in `ψ/memory/learnings/2026-05-08_oracle101-gap-review.md`). ψ/metrics/ created. CLAUDE.md updated with workflow patterns from oracle101 Ch 06B-10.
 - **2026-05-08 ~22:45** — Firecrawl MCP installed (matched DESKTOP-CE4H6GT). Local skill `.claude/skills/sync.md` created — typing `sync` or `/sync` in any session triggers cross-machine state check + propose alignment.
+- **2026-05-10 ~00:00** — `/sync` ran for the first time. `$env:COMPUTERNAME` returned **`RDLT`** (not "TOEY" as documented). All other state matched the prior "TOEY" section exactly (skills lab/47, all 4 MCP, arduino-cli, ESP32 3.3.8, Chronojump, no yt-dlp/ffmpeg). Hardware confirmed by Toey: ASUS B450M-A + Ryzen 7 3700X. Conclusion: same physical machine, "TOEY" was never an actual hostname — it was inferred. Section renamed RDLT, prior history preserved. `.claude/skills/sync/SKILL.md` updated. Skill format also fixed in same session: flat `sync.md` → `sync/SKILL.md` (commit `83b59be`).
+- **Manifest drift lesson (3rd instance this week)**: 2026-05-08 (skills count "full(42)" vs actual 29), 2026-05-09 (skill format flat vs directory), 2026-05-10 (hostname "TOEY" vs RDLT). All three: documented value taken as authoritative without verification. Reinforces lesson in `ψ/memory/learnings/2026-05-09_manifest-drift-and-trigger-skill-pattern.md`. The `/sync` skill itself was the cure for the third instance.
 
 ---
 

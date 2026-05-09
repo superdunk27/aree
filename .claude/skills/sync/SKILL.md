@@ -5,7 +5,7 @@ description: Cross-machine state check + sync. Compares this machine's actual st
 
 # /sync — Cross-machine state check & alignment
 
-**Goal**: Make TOEY (home) and DESKTOP-CE4H6GT (work) — Toey's two machines — produce the same Aree behavior. Run this when starting a session and you want to verify the current machine matches the manifest, or after any install/remove/config change.
+**Goal**: Make RDLT (home) and DESKTOP-CE4H6GT (work) — Toey's two machines — produce the same Aree behavior. Run this when starting a session and you want to verify the current machine matches the manifest, or after any install/remove/config change.
 
 ## Steps
 
@@ -16,10 +16,11 @@ $env:COMPUTERNAME
 ```
 
 Hostname maps to a section in `ψ/active/machines.md`:
-- `TOEY` — home
+- `RDLT` — home (was wrongly recorded as `TOEY` until 2026-05-10 — see machines.md history)
 - `DESKTOP-CE4H6GT` — work
 
 If hostname is neither → this is a **NEW machine**. Create a new section (don't overwrite existing).
+**Always verify with the actual command** — never trust documented hostnames without running `$env:COMPUTERNAME` (this is exactly the lesson that surfaced RDLT — see `ψ/memory/learnings/2026-05-09_manifest-drift-and-trigger-skill-pattern.md`).
 
 ### 2. Snapshot current state (parallel where possible)
 
@@ -55,15 +56,15 @@ Read `ψ/active/machines.md`:
 
 Output format:
 ```
-=== TOEY (current) ===
+=== <CURRENT_HOSTNAME> (current) ===
 ✓ matching items
 Δ drift detected (manifest says X, actual is Y)
 
-=== DESKTOP-CE4H6GT (sister) — what it has that TOEY doesn't ===
+=== <SISTER_HOSTNAME> (sister) — what it has that this machine doesn't ===
 - Firecrawl MCP
 - (etc.)
 
-=== TOEY → DESKTOP-CE4H6GT — pending sync ===
+=== <CURRENT> → <SISTER> — pending sync ===
 - (items in this machine's "Pending sync" list for the sister)
 ```
 
