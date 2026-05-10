@@ -207,3 +207,65 @@ Toey เลือก:
 - ลงมือ Phase 1 → snapshot timeline ใน history section ใหม่ของไฟล์นี้
 
 ไฟล์นี้ append-only หลัง execution เริ่ม (Nothing is Deleted).
+
+---
+
+## 2026-05-10 Resolution Log (decisions made, not yet executed)
+
+Plan revisited Sunday 10 May 2026 morning + evening. Decisions locked, install paused at "boot from USB" step (Toey to resume later).
+
+### Hardware (resolved)
+- **Server**: 128GB RAM, was running XCP-ng (no data to keep — wipe authorized)
+- **Display + keyboard + mouse** attached (needed for OS install)
+- **Network**: connected, host IP under XCP-ng was `192.168.79.14` (will likely change after Ubuntu install via DHCP)
+
+### OS decision (resolved)
+- ❌ **XCP-ng**: rejected — overkill for solo daily use. The hypervisor's value (multi-OS, snapshots, migration) doesn't justify its complexity for one user, one workload type. Toey caught this — I had defaulted to "keep what's installed" (sunk-cost trap).
+- ❌ **WSL2**: rejected — was option in original plan, not relevant once we go bare metal Linux.
+- ✅ **Ubuntu Server 24.04 LTS bare metal** — full 128GB RAM directly, simpler admin (one OS, SSH-direct), Docker for per-project isolation instead of VMs.
+
+### Sizing (resolved — bumped from initial proposal)
+- Original (under XCP-ng VM model): 8GB RAM / 4 vCPU / 50GB disk
+- Revised (bare metal): full machine, 128GB RAM available; ~200GB+ for `~/projects/` (rest for system + Docker images)
+- Rationale: Toey expects multiple projects in future. Don't shrink artificially when the box has plenty.
+
+### Architecture (resolved)
+```
+[Laptop/Phone] —Tailscale—> [aree-home (Ubuntu bare metal)]
+                              ├── tmux + Aree (Claude Code, native)
+                              ├── ~/projects/aree/ (this repo)
+                              ├── ~/projects/<future projects>/
+                              └── Docker (per-project services: postgres, redis, browsers, etc.)
+                                          —git push—> GitHub
+```
+
+### Installer choices (locked, awaiting Toey at server)
+- Hostname: `aree-home`
+- Username: `toey`
+- Disk encryption: ❌ no (LUKS passphrase at every boot is friction for an always-on server)
+- Storage: Use entire disk + LVM + ext4 (no ZFS/BTRFS for now — simpler default; add `restic` for backup later)
+- SSH: ✅ install OpenSSH server during install
+- SSH key import: ✅ from GitHub user `superdunk27` (pulls existing ed25519 pub key)
+- Featured snaps: ❌ none (Docker via official apt repo, not snap)
+
+### Stack to install post-boot (queued, paste-ready when Toey resumes)
+- System: update + upgrade, set static IP (replace DHCP)
+- Network: Tailscale → join personal tailnet
+- Runtimes: Node 20+, Bun, git, gh CLI, tmux
+- Container: Docker Engine + Docker Compose (apt, official repo)
+- Aree: Claude Code CLI, `arra-oracle-skills@26.4.18 install -p lab`, MCP servers (context7, playwright, firecrawl, oh-my-claudecode)
+- Persistence: systemd user service for tmux + claude code start on boot
+- Repo: `git clone git@github.com:superdunk27/aree.git ~/projects/aree`
+
+### Phone UX (resolved — Approach A first)
+- Start: SSH client (Termux Android / Blink Shell or Termius iOS)
+- Defer Telegram bot wrapper until Toey actually uses phone enough to justify 2-4h of bot setup
+
+### Status as of 2026-05-10 ~23:00
+- ✅ Ubuntu Server 24.04 ISO downloaded and written to USB by Toey
+- ⏸️ Install paused — Toey going to bed before booting from USB
+- 📋 Next session: boot installer at server, walk through with above choices, then SSH from RDLT and run the queued stack install
+
+### Cross-reference
+- `ψ/memory/retrospectives/2026-05/10/<HH.MM>_home-server-architecture-locked.md` — session retro
+- `ψ/memory/learnings/2026-05-10_sunk-cost-when-inheriting-infra.md` — lesson on defaulting to "use what's there" vs "use what fits"
