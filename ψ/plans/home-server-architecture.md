@@ -269,3 +269,188 @@ Plan revisited Sunday 10 May 2026 morning + evening. Decisions locked, install p
 ### Cross-reference
 - `ψ/memory/retrospectives/2026-05/10/<HH.MM>_home-server-architecture-locked.md` — session retro
 - `ψ/memory/learnings/2026-05-10_sunk-cost-when-inheriting-infra.md` — lesson on defaulting to "use what's there" vs "use what fits"
+
+---
+
+## 2026-05-11 Phase 2 Paste-Ready (closes friction-3 from previous retro)
+
+Sequence below assumes Ubuntu Server 24.04 has booted, OpenSSH was installed during install, SSH key was imported from GitHub `superdunk27`.
+
+### Stage 0 — At server: get IP, then move to RDLT for SSH
+
+```bash
+# At server console (login as toey)
+ip -4 addr show | grep -E 'inet ' | grep -v 127.0.0.1
+# → note the 192.168.x.x address
+```
+
+```powershell
+# From RDLT (this machine)
+ssh toey@<ip>
+# should connect with the imported GitHub key, no password
+```
+
+### Stage 1 — System update + essentials
+
+```bash
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y curl wget git tmux build-essential ca-certificates gnupg lsb-release unzip
+```
+
+### Stage 2 — Tailscale (so we can stop caring about local IP)
+
+```bash
+curl -fsSL https://tailscale.com/install.sh | sh
+sudo tailscale up
+# → open the auth URL printed in browser, login, approve
+tailscale ip -4
+# → note the 100.x.x.x address (this is the stable name to SSH to from anywhere)
+```
+
+### Stage 3 — Node 20 + Bun + gh CLI
+
+```bash
+# Node 20 via NodeSource
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs
+node -v && npm -v
+
+# Bun
+curl -fsSL https://bun.sh/install | bash
+source ~/.bashrc
+bun --version
+
+# gh CLI (official apt)
+sudo mkdir -p -m 755 /etc/apt/keyrings
+curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/etc/apt/keyrings/githubcli-archive-keyring.gpg
+sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+sudo apt update && sudo apt install -y gh
+gh auth login
+```
+
+### Stage 4 — Docker Engine + Compose (official apt repo, NOT snap)
+
+```bash
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt update
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo usermod -aG docker $USER
+newgrp docker   # or logout/login
+docker --version
+```
+
+### Stage 5 — Clone aree repo
+
+```bash
+mkdir -p ~/projects && cd ~/projects
+# If gh logged in:
+gh repo clone superdunk27/aree
+# Or plain git (HTTPS, will prompt for credential):
+# git clone https://github.com/superdunk27/aree.git
+cd aree
+```
+
+### Stage 6 — Claude Code CLI + Oracle skills (lab profile)
+
+```bash
+# Claude Code CLI (verify command at install time — check docs.anthropic.com/claude-code)
+npm install -g @anthropic-ai/claude-code
+claude --version
+
+# Login (interactive once — paste the API key or follow auth flow)
+claude
+# → exit after auth confirmed (Ctrl+C / type /exit)
+
+# Oracle skills — same version as RDLT
+cd ~/projects/aree
+npx arra-oracle-skills@26.4.18 install -p lab
+# → verify 47 skills installed
+```
+
+### Stage 7 — MCP servers
+
+> ⚠️ Exact `claude mcp add` syntax may differ by version. If unsure, run `claude mcp --help` first.
+
+```bash
+# context7
+claude mcp add context7 -- npx -y @upstash/context7-mcp
+# playwright
+claude mcp add playwright -- npx -y @playwright/mcp@latest
+# firecrawl (needs FIRECRAWL_API_KEY)
+claude mcp add firecrawl --env FIRECRAWL_API_KEY=<key> -- npx -y firecrawl-mcp
+# oh-my-claudecode plugin → install via /plugin in Claude Code interactive
+
+claude mcp list   # verify
+```
+
+### Stage 8 — Persistence (tmux + Aree auto-start on boot)
+
+```bash
+mkdir -p ~/.config/systemd/user
+cat > ~/.config/systemd/user/aree.service <<'EOF'
+[Unit]
+Description=Aree (Claude Code in persistent tmux)
+After=network-online.target
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/tmux new-session -d -s aree -c %h/projects/aree
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=default.target
+EOF
+
+systemctl --user daemon-reload
+systemctl --user enable aree.service
+sudo loginctl enable-linger toey   # ← critical: lets the service run when toey isn't logged in via tty
+systemctl --user start aree.service
+systemctl --user status aree.service
+```
+
+Attach from anywhere:
+```bash
+ssh toey@<tailscale-ip>
+tmux attach -t aree
+# inside tmux: run `claude` to start Aree
+# detach: Ctrl+B then D (session keeps running)
+```
+
+### Stage 9 — Update machines.md + sync state
+
+```bash
+# On RDLT (or via SSH to aree-home), add aree-home section to ψ/active/machines.md
+# Then on aree-home: mirror ψ/memory/personal-context.md by reading it (no write needed initially)
+```
+
+### Verification checklist
+
+- [ ] `ssh toey@<ip>` works without password (GitHub key auth)
+- [ ] `tailscale ip -4` returns 100.x.x.x
+- [ ] `node -v` ≥ 20, `bun --version` runs, `gh auth status` shows logged in
+- [ ] `docker run --rm hello-world` succeeds without sudo
+- [ ] `claude --version` runs, login persisted
+- [ ] `npx arra-oracle-skills@26.4.18 list` shows 47 skills (lab profile)
+- [ ] `systemctl --user status aree.service` = active (running)
+- [ ] Reboot test: `sudo reboot` → SSH back in → `tmux ls` shows `aree` session still alive
+
+### Rough time estimate
+
+- Stages 1-3: ~15 min (mostly apt waits)
+- Stage 4 (Docker): ~10 min
+- Stages 5-7 (Aree stack): ~20 min if MCP syntax checks needed
+- Stage 8 (systemd): ~10 min
+- Total: ~1 hour from "logged in to fresh Ubuntu" to "Aree on autopilot"
+
+### Things flagged to verify at install time (not assumed)
+
+- Claude Code CLI exact npm package name (`@anthropic-ai/claude-code` is current — verify with docs)
+- `claude mcp add` flag syntax for each server (varies by Claude Code version)
+- Tailscale tag/ACL: default tailnet is fine for personal use; consider tagging this node as `tag:server` if family grows
+- If Docker `newgrp docker` doesn't take effect → logout/login
+
