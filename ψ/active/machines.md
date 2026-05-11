@@ -103,7 +103,7 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 **User**: `toey`
 **Hardware**: Intel Xeon E5-2690 v3 (12c/24t @ 2.60GHz), 128 GB RAM (123 GiB usable), 480 GB SSD
 **Install date**: 2026-05-11 (today — bare metal, replaced inherited XCP-ng install)
-**Last-updated**: 2026-05-11 ~15:30 GMT+7 (initial bring-up complete, pre-Claude-Code-login)
+**Last-updated**: 2026-05-11 ~15:45 GMT+7 (post-Claude-Code-login + oh-my-claudecode plugin installed via `/oh-my-claudecode:setup` wizard)
 
 > **Role**: Always-on writer. Client devices (RDLT, future DESKTOP-CE4H6GT) connect to this box via Tailscale SSH and run Aree inside the persistent `aree` tmux session.
 
@@ -117,11 +117,19 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 | gh CLI | 2.92.0 |
 | Docker | 29.4.3 + compose plugin (toey in docker group) |
 | tmux | 3.6 (session `aree` running, auto-start via systemd) |
-| Claude Code | 2.1.138 (`@anthropic-ai/claude-code` global, NOT yet logged in) |
-| Oracle skills | **lab (47)** — installed to `~/projects/aree/.claude/skills/` (project scope) |
-| MCP servers | `context7` ✓, `playwright` ✓, `firecrawl` ✓ (plugin:oh-my-claudecode pending plugin install) |
-| MCP claude.ai | none yet (Google Drive/Calendar/Gmail not configured) |
+| Claude Code | 2.1.138 (logged in this session) |
+| Oracle skills | **lab (47)** — installed to `~/projects/aree/.claude/skills/` (project-local, **intentional**: skills committed to repo, sync via `git pull`. Differs from RDLT/DESKTOP which use `~/.claude/skills/` global scope) |
+| Local skills | `sync/` (cross-machine state alignment, committed at `.claude/skills/sync/`) |
+| MCP servers | `context7` ✓, `playwright` ✓, `firecrawl` ✓, `plugin:oh-my-claudecode:t` ✓ |
+| MCP claude.ai | Google Drive / Calendar / Gmail registered (needs OAuth auth — not used yet, same status as RDLT/DESKTOP) |
+| oh-my-claudecode plugin | **v4.13.7** (installed via `/plugin install oh-my-claudecode` from `omc` marketplace `github.com/Yeachan-Heo/oh-my-claudecode`) |
+| OMC global CLAUDE.md | `~/.claude/CLAUDE.md` (canonical OMC content, overwrite mode — no prior file existed) |
+| OMC HUD | `~/.claude/hud/omc-hud.mjs` installed, `statusLine` configured in `~/.claude/settings.json` |
+| OMC agent teams | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` enabled in `~/.claude/settings.json` (experimental Claude Code feature) |
+| OMC config | `~/.claude/.omc-config.json` — `defaultExecutionMode=ultrawork`, `taskTool=builtin`, team defaults `maxAgents=3 + defaultAgentType=claude` |
+| OMC CLI (`omc`) | **NOT installed** — `npm install -g oh-my-claude-sisyphus` failed with EACCES on `/usr/lib/node_modules`. Install via `sudo npm install -g oh-my-claude-sisyphus` when needed (plugin `/oh-my-claudecode:*` commands work without it) |
 | sudo | NOPASSWD enabled for `toey` (`/etc/sudoers.d/toey-nopasswd`) — single-user homeserver trust model |
+| Ruby | **NOT installed** (Ralph workflows need it — `sudo apt install ruby-full` when wanted, deferred 2026-05-11) |
 | arduino-cli / ESP32 / yt-dlp / ffmpeg / Chronojump | NOT installed (add if needed) |
 
 ### Network
@@ -139,10 +147,15 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 - Free: 405 G / 437 G (~7% used post-install)
 
 ### Pending (next session)
-- **Claude Code first-run login** — `claude` interactive (browser OAuth) by Toey
-- **oh-my-claudecode plugin** — install via `/plugin install oh-my-claudecode` inside Claude Code, after login
-- **Optional**: `claude.ai` Google Drive/Calendar/Gmail MCP auth if Toey wants
+- **Optional**: `claude.ai` Google Drive/Calendar/Gmail MCP auth if Toey wants (servers registered, OAuth flow not run)
+- **Optional**: install Ruby (`sudo apt install ruby-full`) if Ralph workflows are wanted
+- **Optional**: install OMC CLI (`sudo npm install -g oh-my-claude-sisyphus`) if standalone `omc` commands are wanted
+- **Optional**: restart Claude Code to activate OMC HUD statusline (configured but needs restart to render)
 - **Decision pending**: keep aree-home as sole writer, or run multi-machine writer (likely sole writer per home-server-architecture.md plan)
+
+### Pending propagation to sister machines (RDLT, DESKTOP-CE4H6GT)
+- **oh-my-claudecode plugin** (v4.13.7) — install via `/plugin install oh-my-claudecode` after `/plugin marketplace add https://github.com/Yeachan-Heo/oh-my-claudecode`. Test on aree-home first (this session) to confirm no conflict with Aree's CLAUDE.md identity layer before propagating.
+- **HUD statusline** — auto-installed by `/oh-my-claudecode:setup` wizard, no manual step needed beyond running the wizard.
 
 ### Removed / Excluded
 - **XCP-ng** — was inherited on this hardware, wiped 2026-05-11 at install time. No data preserved (Toey confirmed nothing of value).
@@ -154,6 +167,9 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 - **2026-05-11 ~15:15** — Block 2 stack: NodeSource Node v20.20.2, Bun 1.3.13 (~/.bun/bin), gh CLI 2.92.0, Docker Engine 29.4.3 + Compose plugin (official apt repo, NOT snap). `toey` added to docker group.
 - **2026-05-11 ~15:25** — Block 3a: aree repo cloned at `~/projects/aree` (via HTTPS, then remote switched to SSH after aree-home key uploaded to GitHub). Generated aree-home ed25519 key, uploaded as `aree-home` on GitHub (auth scope). `git@github.com:superdunk27/aree.git` SSH auth verified. Claude Code CLI installed globally. Oracle skills `lab (47)` installed (initial run hit `env: 'bun': No such file` for non-interactive SSH — fixed by `export PATH="$HOME/.bun/bin:$PATH"` + `-a claude-code -y` flags).
 - **2026-05-11 ~15:30** — Block 3b: MCP servers `context7`, `playwright`, `firecrawl` added (user scope, `~/.claude.json`). Health check: all 3 Connected. systemd user service `aree.service` created + enabled + linger enabled (tmux survives logout/reboot). tmux session `aree` running, ready for Claude Code on attach.
+- **2026-05-11 ~15:40 GMT+7** — Claude Code first-run login complete (browser OAuth, in-tmux). claude.ai bundle MCPs auto-registered: Google Drive / Calendar / Gmail (OAuth flow not run yet, status: "needs authentication"). plugin marketplace `omc` added (`/plugin marketplace add https://github.com/Yeachan-Heo/oh-my-claudecode`). Plugin `oh-my-claudecode@omc` installed (v4.13.7). `/plugin install` reported "Reloaded: 1 plugin · 1 skill · 24 agents · 24 hooks · 1 plugin MCP server".
+- **2026-05-11 ~15:45 GMT+7** — `/oh-my-claudecode:setup` wizard ran (global scope, overwrite mode — no prior `~/.claude/CLAUDE.md` existed). Installed: OMC canonical CLAUDE.md, `omc-reference` skill (`~/.claude/skills/omc-reference/`), HUD wrapper (`~/.claude/hud/omc-hud.mjs` + `lib/config-dir.mjs`), statusLine configured in `~/.claude/settings.json` using `node ${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hud/omc-hud.mjs` (forward slashes, portable). Enabled `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` in settings.json. `.omc-config.json` written with `defaultExecutionMode=ultrawork`, `taskTool=builtin`, team defaults `maxAgents=3 + defaultAgentType=claude`. **Failures (non-blocking)**: OMC CLI npm install (`npm install -g oh-my-claude-sisyphus`) failed EACCES on `/usr/lib/node_modules` (needs sudo, deferred); Ruby for Ralph workflows missing (deferred — `sudo apt install ruby-full`).
+- **2026-05-11 ~16:00 GMT+7** — `/sync` ran for the first time on aree-home. Hostname `hostname` returned **`aree-home`** ✓ matches manifest section. State diff identified 6 drift/new items vs manifest (Claude Code login, OMC plugin v4.13.7, OMC HUD, agent teams env, OMC global CLAUDE.md, claude.ai MCP triplet now registered) — all are intentional outcomes of the install workflow, not unwanted drift. Decided to **commit `.claude/skills/` (47 oracle + sync local + 2 metadata files) into the repo** — `aree-home` install scope is project-local (`~/projects/aree/.claude/skills/`) intentionally so that the skill set syncs across machines via `git pull` together with `ψ/`. RDLT/DESKTOP continue to use global `~/.claude/skills/` scope; future propagation could converge them to project-local but that's deferred. machines.md updated and committed in the same change.
 
 ### Architecture (resolved 2026-05-10, executed 2026-05-11)
 
