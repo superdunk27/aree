@@ -6,3 +6,7 @@ node_modules/
 ψ/learn/**/origin
 .omc/
 .playwright-mcp/
+
+# Tailscale cert/key residue from `tailscale cert` invocations
+*.tail*.ts.net.crt
+*.tail*.ts.net.key
