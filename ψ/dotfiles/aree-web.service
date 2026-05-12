@@ -1,0 +1,17 @@
+[Unit]
+Description=ttyd web terminal that attaches to the 'aree' tmux session
+Documentation=https://github.com/tsl0922/ttyd
+After=network.target aree.service
+Wants=aree.service
+
+[Service]
+Type=simple
+# Bind to localhost only; Tailscale Serve proxies from the tailnet to here
+# with auto-issued HTTPS, so we never expose port 7681 outside this machine.
+ExecStart=/usr/bin/ttyd --writable --port 7681 --interface 127.0.0.1 \
+    /usr/bin/tmux new-session -A -s aree
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

@@ -29,6 +29,7 @@ Effects:
 |------|---------------------|
 | `tmux.conf` | mouse on, 50k history, OSC 52 clipboard sync, right-click paste behavior tuned for Windows Terminal / Termius |
 | `bashrc-aree-home.sh` | SSH-aware auto-attach into tmux session `aree` (server-side workaround for Termius free-tier missing startup-command field) |
+| `aree-web.service` | systemd user unit that runs ttyd → tmux `aree` on `127.0.0.1:7681` so Tailscale Serve can proxy it as `https://aree-home.tail9e69b1.ts.net/` for browser access |
 
 ## Install / Restore on a fresh aree-home
 
@@ -52,6 +53,32 @@ EOF
 # Reload tmux if a session is already running
 tmux source-file ~/.tmux.conf 2>/dev/null
 ```
+
+## Install / Restore Phase 3 (browser channel via ttyd + Tailscale Serve)
+
+```bash
+# 1. Install ttyd
+sudo apt update && sudo apt install -y ttyd
+
+# 2. Disable the apt-shipped system service that grabs port 7681 as root
+sudo systemctl disable --now ttyd.service
+sudo systemctl mask ttyd.service
+
+# 3. Install our user service from the repo backup
+mkdir -p ~/.config/systemd/user
+cp ~/projects/aree/ψ/dotfiles/aree-web.service ~/.config/systemd/user/
+systemctl --user daemon-reload
+systemctl --user enable --now aree-web.service
+
+# 4. Configure Tailscale Serve (first time per tailnet may need admin enable)
+sudo tailscale serve --bg http://127.0.0.1:7681
+tailscale serve status
+```
+
+Visit `https://aree-home.tail9e69b1.ts.net/` from any device on the tailnet.
+If a Windows client can't resolve the hostname (Tailscale DNS not adopted),
+fall back to a static entry in `C:\Windows\System32\drivers\etc\hosts`:
+`100.77.60.57 aree-home.tail9e69b1.ts.net` (admin PowerShell).
 
 ## When to add a file here
 
