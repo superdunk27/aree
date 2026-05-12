@@ -1,6 +1,6 @@
 # Access Aree Everywhere — low-friction multi-channel access
 
-**Status**: Phase 1 closed on RDLT (2026-05-12 ~20:40 GMT+7). DESKTOP pending — same `aree-install.ps1` flow when at DESKTOP next. Phase 2-4 pending.
+**Status**: Phase 1 closed on RDLT (2026-05-12 ~20:40 GMT+7). DESKTOP pending Phase 1.2/1.3. Phase 2 (Android Termius) closed 2026-05-12 ~21:10. Phase 3-4 pending.
 **Date written**: 2026-05-11
 **Trigger phrase**: "คุยกับคุณที่ไหนก็ได้" / "ทำให้คุย Aree ง่ายขึ้น" / "access everywhere"
 
@@ -262,8 +262,13 @@ tailscale serve status
   ```
   Script is idempotent (re-run safe). Tests same as RDLT: WT dropdown + Desktop double-click.
 
-### Phase 2 — Android
-*(pending — Phase 1 across both Windows machines must close first per success criteria)*
+### Phase 2 — Android (ROG Phone 7 Series)
+- **2026-05-12 ~21:00 GMT+7** — Tailscale already installed on phone (joined tailnet 2026-05-11, IP `100.95.74.25`, node `rog-phone-7-series`). Was offline 3h due to Android battery optimization killing the background service — brought online by reopening Tailscale app. Pending: set Tailscale to "Unrestricted" battery if offlines become recurring.
+- **2026-05-12 ~21:05 GMT+7** — Termius installed from Play Store (free tier). ed25519 key generated in Termius vault: name `rog-phone-toey-2026-05-12`, fingerprint `SHA256:Pyo9/L0pqNziGZgR/Nsw2JAC/6nTxPB0tjMYx9EKbOk`. Public key pasted in chat; Aree appended to `~/.ssh/authorized_keys` on aree-home (3 keys total now: RDLT, DESKTOP, ROG Phone).
+- **2026-05-12 ~21:08 GMT+7** — Termius free tier hides the "Startup snippet" / "exec on connect" field behind paywall. **Server-side workaround instead**: appended an auto-attach block to `~/.bashrc` on aree-home — when SSH login lands without `$TMUX` set, `exec tmux new-session -A -s aree` drops into the persistent `aree` session. Block is gated on `$SSH_CONNECTION` so local console logins on aree-home are unaffected. RDLT/DESKTOP bypass bash via their own SSH `RemoteCommand` so they're also unaffected.
+- **2026-05-12 ~21:10 GMT+7** — Host profile saved in Termius (alias `Aree (aree-home)`, `toey@100.77.60.57:22`, key = phone-generated). Tapped Connect → ~2 second latency → Toey reported "เข้าได้แล้ว". Server-side verification: `tmux list-clients -t aree` shows 2 attached clients (RDLT pts/0 209x51, phone pts/2 80x36); `ss -tn` shows established SSH from both `100.111.92.57` and `100.95.74.25`. ✅ Phase 2 closed.
+
+**Caveat noted**: shared tmux view resizes window to smallest attached client. When phone + RDLT attach simultaneously, RDLT terminal shows in 80x36 worth of space. `aggressive-resize on` or grouped sessions can fix it — deferred until actual pain.
 
 ### Phase 3 — Web terminal
 *(pending)*

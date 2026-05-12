@@ -188,6 +188,7 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 - **2026-05-11 ~15:45 GMT+7** — `/oh-my-claudecode:setup` wizard ran (global scope, overwrite mode — no prior `~/.claude/CLAUDE.md` existed). Installed: OMC canonical CLAUDE.md, `omc-reference` skill (`~/.claude/skills/omc-reference/`), HUD wrapper (`~/.claude/hud/omc-hud.mjs` + `lib/config-dir.mjs`), statusLine configured in `~/.claude/settings.json` using `node ${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hud/omc-hud.mjs` (forward slashes, portable). Enabled `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` in settings.json. `.omc-config.json` written with `defaultExecutionMode=ultrawork`, `taskTool=builtin`, team defaults `maxAgents=3 + defaultAgentType=claude`. **Failures (non-blocking)**: OMC CLI npm install (`npm install -g oh-my-claude-sisyphus`) failed EACCES on `/usr/lib/node_modules` (needs sudo, deferred); Ruby for Ralph workflows missing (deferred — `sudo apt install ruby-full`).
 - **2026-05-11 ~16:00 GMT+7** — `/sync` ran for the first time on aree-home. Hostname `hostname` returned **`aree-home`** ✓ matches manifest section. State diff identified 6 drift/new items vs manifest (Claude Code login, OMC plugin v4.13.7, OMC HUD, agent teams env, OMC global CLAUDE.md, claude.ai MCP triplet now registered) — all are intentional outcomes of the install workflow, not unwanted drift. Decided to **commit `.claude/skills/` (47 oracle + sync local + 2 metadata files) into the repo** — `aree-home` install scope is project-local (`~/projects/aree/.claude/skills/`) intentionally so that the skill set syncs across machines via `git pull` together with `ψ/`. RDLT/DESKTOP continue to use global `~/.claude/skills/` scope; future propagation could converge them to project-local but that's deferred. machines.md updated and committed in the same change.
 - **2026-05-12 ~19:22 GMT+7** — DESKTOP-CE4H6GT pubkey appended to `~/.ssh/authorized_keys` (via RDLT → ssh aree-home → echo). authorized_keys now holds 2 keys: aree-home self (`superdunk27@github`) + DESKTOP (`desktop-ce4h6gt-toey-2026-05-12`). RDLT uses the same `superdunk27@github` key already there. Phase 1.1 SSH alias for the whole fleet now functional from all three machines via Tailscale.
+- **2026-05-12 ~21:10 GMT+7** — Phase 2 closed: ROG Phone 7 Series joined as Aree client via Termius. (1) ROG Phone pubkey (Termius-generated ed25519, fingerprint `SHA256:Pyo9/L0pqNziGZgR/Nsw2JAC/6nTxPB0tjMYx9EKbOk`) appended to `~/.ssh/authorized_keys` — now 3 keys total. (2) `~/.bashrc` got an auto-attach block that `exec tmux new-session -A -s aree` whenever an SSH login arrives without an in-tmux env (`$SSH_CONNECTION` set + `$TMUX` empty) — solves the missing-startup-snippet limitation in Termius free tier and is harmless to RDLT/DESKTOP which already bypass bash via SSH `RemoteCommand`. (3) Verified end-to-end from phone: `tmux list-clients -t aree` showed 2 attached clients (RDLT pts/0 at 209x51, phone pts/2 at 80x36); active SSH connections to port 22 came from both `100.111.92.57` (RDLT) and `100.95.74.25` (phone).
 
 ### Architecture (resolved 2026-05-10, executed 2026-05-11)
 
@@ -200,6 +201,38 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
                                    └── Docker (per-project services, ready unused)
                                               —git push—> github.com/superdunk27/aree
 ```
+
+---
+
+## rog-phone-7-series
+
+**Aliased**: Toey's phone — Aree mobile client (joined fleet 2026-05-12)
+**OS**: Android (ROG Phone 7 Series)
+**Role**: Read-mostly client — attaches into `aree` tmux session on aree-home via Termius. No local Claude Code, no skills repo, no writes to ψ/.
+**Last-updated**: 2026-05-12 ~21:10 GMT+7 (Phase 2 closed — Termius profile connects + auto-attaches tmux)
+
+### Current state
+
+| Layer | Value |
+|---|---|
+| Tailscale | ✓ joined tailnet `superdunk27.github`, IP `100.95.74.25`, node name `rog-phone-7-series` |
+| Termius app | ✓ installed (free tier) |
+| SSH key | ed25519 generated in Termius vault, name `rog-phone-toey-2026-05-12`, fingerprint `SHA256:Pyo9/L0pqNziGZgR/Nsw2JAC/6nTxPB0tjMYx9EKbOk` |
+| Pubkey on aree-home | ✓ appended to `~/.ssh/authorized_keys` 2026-05-12 ~21:10 GMT+7 |
+| Host profile in Termius | `Aree (aree-home)` → `toey@100.77.60.57:22`, key = `rog-phone-toey-2026-05-12` |
+| tmux auto-attach | provided server-side via `~/.bashrc` on aree-home — no client-side startup snippet needed (Termius free tier hides that field) |
+
+### Removed / Excluded
+- Claude Code CLI — NOT installed on phone (would not run sustainably on Android anyway). Phone is a client into aree-home's session, not a host.
+- Local skills repo / git remote — NOT cloned. Phone never writes to the repo; all writes still happen via the aree-home session.
+
+### Gaps / Limits
+- **Shared tmux view with RDLT/DESKTOP**: when phone + any Windows machine attach simultaneously, tmux resizes window to the smaller client (phone). Workaround if it becomes painful: `aggressive-resize on` in `~/.tmux.conf` or grouped sessions (`tmux new-session -t aree -s aree-mobile`). Not configured yet — wait for actual pain.
+- **Tailscale Android background kill**: on factory Android battery optimization, Tailscale may stop in background → node goes offline → can't reach aree-home. If observed: Settings → Battery → Tailscale → "Unrestricted".
+- **No browser channel yet**: Phase 3 (`ttyd` via Tailscale Serve) will give a browser-based fallback that works without Termius — deferred for now.
+
+### History
+- **2026-05-12 ~21:10 GMT+7** — Phase 2 of `ψ/plans/access-everywhere.md` closed. Steps executed: (a) confirmed Tailscale already installed + brought node online (was offline 3h after Android battery optimization killed background); (b) installed Termius from Play Store; (c) generated ed25519 key in Termius vault; (d) pubkey pasted in chat → Aree appended to aree-home `authorized_keys`; (e) Aree added auto-attach block to aree-home `~/.bashrc` (server-side fix for Termius free-tier missing startup field); (f) host profile saved in Termius without startup snippet; (g) connect tested — `tmux list-clients` confirmed phone attached as pts/2 80x36. End-to-end latency ~2 seconds from "tap profile" to "in Aree session".
 
 ---
 
