@@ -1,6 +1,6 @@
 # Access Aree Everywhere — low-friction multi-channel access
 
-**Status**: Phase 1 closed on RDLT (2026-05-12 ~20:40 GMT+7). DESKTOP pending Phase 1.2/1.3. Phase 2 (Android Termius) closed 2026-05-12 ~21:10. Phase 3-4 pending.
+**Status**: Phase 1 closed on RDLT (2026-05-12 ~20:40). DESKTOP pending Phase 1.2/1.3. Phase 2 (Android Termius) closed 2026-05-12 ~21:10. Phase 3 (Web ttyd via Tailscale Serve) closed 2026-05-12 ~22:00 on RDLT. Phase 4 deferred.
 **Date written**: 2026-05-11
 **Trigger phrase**: "คุยกับคุณที่ไหนก็ได้" / "ทำให้คุย Aree ง่ายขึ้น" / "access everywhere"
 
@@ -270,8 +270,23 @@ tailscale serve status
 
 **Caveat noted**: shared tmux view resizes window to smallest attached client. When phone + RDLT attach simultaneously, RDLT terminal shows in 80x36 worth of space. `aggressive-resize on` or grouped sessions can fix it — deferred until actual pain.
 
-### Phase 3 — Web terminal
-*(pending)*
+### Phase 3 — Web terminal (browser via Tailscale Serve)
+- **2026-05-12 ~21:30 GMT+7** — Step 3.1: `sudo apt install -y ttyd` → 1.7.7 from universe. **Gotcha**: the package ships an enabled system-level `ttyd.service` that runs as root with `/bin/login` and grabs port 7681 silently. First boot of our user service failed with `EADDRINUSE`. Fix: `sudo systemctl disable --now ttyd.service && sudo systemctl mask ttyd.service`.
+- **2026-05-12 ~21:35 GMT+7** — Step 3.2: user systemd unit at `~/.config/systemd/user/aree-web.service` launches `/usr/bin/ttyd --writable --port 7681 --interface 127.0.0.1 /usr/bin/tmux new-session -A -s aree`. Restart on failure, 5s backoff. Bound to localhost only so the only path in is via Tailscale Serve.
+- **2026-05-12 ~21:40 GMT+7** — Step 3.3a: `sudo tailscale serve --bg http://127.0.0.1:7681` returned "Serve is not enabled on your tailnet" with a one-time admin URL `https://login.tailscale.com/f/serve?node=netQPLWeLR11CNTRL`. Toey opened it in browser, enabled the feature, and the pending serve config activated retroactively. New CLI syntax: `tailscale serve <target>` (default HTTPS), unlike the older `serve https / <target>` form documented in the plan.
+- **2026-05-12 ~21:45 GMT+7** — Step 3.3b: `tailscale serve status` confirms `https://aree-home.tail9e69b1.ts.net (tailnet only) |-- / proxy http://127.0.0.1:7681`. From aree-home itself, `curl -sI https://aree-home.tail9e69b1.ts.net/` returns `HTTP/2 200` with content-type text/html — ttyd is reachable through the Tailscale proxy + auto-issued cert.
+- **2026-05-12 ~22:00 GMT+7** — Step 3.4 (Windows DNS adoption gotcha + hosts fallback): RDLT could not resolve `aree-home.tail9e69b1.ts.net` even after `tailscale set --accept-dns=true`, `tailscale down/up`, and `ipconfig /flushdns`. Windows kept routing DNS to the ISP IPv6 server (`2001:fb0:100::207:49`). Forcing the query against Tailscale's own DNS (`nslookup ... 100.100.100.100`) resolved correctly, confirming the issue was Windows DNS adoption, not Tailscale Serve. Workaround: append `100.77.60.57 aree-home.tail9e69b1.ts.net` to `C:\Windows\System32\drivers\etc\hosts` from admin PowerShell. Browser reached the URL immediately after. nslookup still times out (it skips hosts files); the browser path uses the Windows resolver chain which honors hosts. ✅ Phase 3 closed on RDLT.
+
+**Pending Phase 3 propagation to other clients**:
+- **DESKTOP-CE4H6GT** — likely same Windows DNS gotcha; expect to add the same hosts line.
+- **ROG Phone** — Android phone using MagicDNS through Tailscale app should resolve natively (no hosts workaround). Test next time online.
+- **Any third-party device** — needs to be on the tailnet *and* either resolve MagicDNS natively or have the hosts entry.
+
+**Browser-ttyd UX caveats (vs Windows Terminal / Termius)**:
+- Right-click in browser triggers the browser's context menu (Reload / Save image), not tmux paste. Use **Ctrl+V** (browser-native paste) instead.
+- Drag-select still works but it's a browser-level selection. Use **Ctrl+C** to copy from it, not the drag-end auto-copy we configured in tmux.
+- Mouse wheel scroll forwards to tmux scrollback as usual.
+- The ttyd window will inherit tmux's smallest-client size — if a Windows machine is attached simultaneously at 209x51 and the browser tab is narrower, tmux shrinks to fit the narrower client.
 
 ### Phase 4 — Quick captures
 *(deferred — wait for Phase 1-3 to settle)*
