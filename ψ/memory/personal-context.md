@@ -4,7 +4,7 @@ Mirror of durable Toey-context from per-instance memory (`~/.claude/projects/...
 
 **Source of truth**: per-instance memory files **when both exist on the same instance**. This file is the **fallback + cross-instance snapshot**. If they diverge, the most recent write wins (per file timestamp); reconcile on next session.
 
-**Last mirror sync**: 2026-05-08 by Aree on DESKTOP-CE4H6GT.
+**Last mirror sync**: 2026-05-12 by Aree on DESKTOP-CE4H6GT (added 2.6 communicate-while-tools-run).
 
 ---
 
@@ -91,6 +91,18 @@ For physical assembly with stacked layers / mm-scale clearances: **mentally simu
 For projects spanning days/weeks, ask the user-context-level "why is this the project you're choosing right now?" early — not as an interview, but as one curious question. The answer reshapes scope.
 
 **Origin**: 2026-05-07 — Aree treated jump mat as pure technical project for 3 days without asking. On Day 3 evening Toey volunteered the business-angle context, which would have reshaped Phase 2/3 design choices. Lesson: ask once, early.
+
+### 2.6 Communicate while tools run — don't go silent
+
+When a tool will take more than ~30s (winget install, npm install, big git pull, daemon login, network scans):
+- **Before invoking**: write a one-liner like *"กำลังติดตั้ง Tailscale (~60s)…"*
+- **If it stretches**: post a brief "ยังกำลัง… X seconds in" between tool calls
+- **For `run_in_background` / `Monitor`**: announce that it's running, will report on complete
+- **For UI-blocking actions Toey must do** (browser approve, UAC click): hand off explicitly with the URL/step and *stop*, don't proceed in parallel
+
+The Bash `description` parameter is for the internal tool log — it never reaches Toey. Only text written between tool calls does.
+
+**Origin**: 2026-05-12 — `winget install Tailscale.Tailscale` took ~60s with zero intermediate output. Toey messaged *"เป็นไงบ้างถึงไหนแล้ว เห็นเงียบไปเลย"* — gentle but a clear signal that silence reads as "stuck or lost". Applies anywhere, any task type.
 
 ---
 
