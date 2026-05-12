@@ -10,7 +10,7 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 
 **Aliased**: (Toey's working machine — set today 2026-05-08)
 **OS**: Windows 11
-**Last-updated**: 2026-05-08 ~16:00 GMT+7 (added Firecrawl MCP + documented PubMed E-utilities)
+**Last-updated**: 2026-05-12 ~14:15 GMT+7 (OMC plugin installed, skills upgraded global lab 47, project-local skills synced via git pull from aree-home)
 
 ### Current state
 
@@ -20,9 +20,11 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 | Bun | 1.3.13 |
 | npx | 11.9.0 |
 | winget | v1.28.240 |
-| Oracle skills | full (42) — `arra-oracle-skills@26.4.18` |
-| MCP servers | `context7`, `playwright`, `firecrawl`, `plugin:oh-my-claudecode:t` |
+| Oracle skills (global) | **lab (47)** — `arra-oracle-skills@26.4.18` (upgraded 2026-05-12 from full 42 → lab 47) |
+| Oracle skills (project-local) | **lab (47)** — `.claude/skills/` from `git pull` (committed at aree-home 2026-05-11) |
+| MCP servers | `context7` ✓, `playwright` ✓, `firecrawl` ✓, `plugin:oh-my-claudecode:t` ✓ |
 | MCP claude.ai | Google Drive / Calendar / Gmail (needs auth — not used yet) |
+| **oh-my-claudecode plugin** | **v4.13.7** (installed 2026-05-12 via `/plugin install oh-my-claudecode` from `omc` marketplace) |
 | arduino-cli | 1.4.1 (`/c/Program Files/Arduino CLI/arduino-cli.exe`) |
 | ESP32 core | esp32:esp32 3.3.8 (installed via arduino-cli) |
 | Web research APIs | NCBI E-utilities (curl, no key, free) |
@@ -43,12 +45,14 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 - Chronojump — not installed here (deprioritized 2026-05-07 due to UX)
 
 ### Pending sync (on next visit)
-- **Skills**: upgrade `full (42)` → `lab (47)` via `npx -y arra-oracle-skills@26.4.18 install -g -y -p lab` to match TOEY (home). +18 skills: `/contacts`, `/dream`, `/feel`, `/fleet`, `/harden`, `/i-believed`, `/inbox`, `/machines`, `/mailbox`, `/morpheus`, `/release`, `/schedule`, `/vault`, `/warp`, `/watch`, `/work-with`, `/worktree`, `/wormhole`. See `ψ/memory/learnings/2026-05-08_oracle101-gap-review.md` for context.
-- **CLAUDE.md changes**: pulled via `git pull` automatically — Workflow patterns subsection + Brain Structure (added `metrics/`, `plans/`).
+- (none — all caught up 2026-05-12)
 
 ### History
 - **2026-05-08 09:30–09:45** — Sync from machine-2026-05-07: skills standard→full, +context7 +playwright MCP, arduino-cli 1.4.1 + ESP32 core 3.3.8
 - **2026-05-08 ~16:00** — Web research stack expansion: +Firecrawl MCP (smoke-tested vs Jina-blocked PMC paper, scraped 269KB content successfully), documented NCBI E-utilities pattern. Filled the gap surfaced during morning's strength-for-swim-sprint research where Jina banned PMC anonymous access.
+- **2026-05-12 ~14:00 GMT+7** — `git pull` brought 96 files from aree-home + RDLT work (`.claude/skills/` 47 dirs committed project-local, 5 new learnings, 4 new retros, `ψ/plans/access-everywhere.md`, CLAUDE.md workflow patterns). Manifest was 4 days stale.
+- **2026-05-12 ~14:10 GMT+7** — `/plugin install oh-my-claudecode` installed plugin v4.13.7 from `omc` marketplace. `/reload-plugins` reported "1 plugin · 1 skill · 24 agents · 24 hooks · 1 plugin MCP server".
+- **2026-05-12 ~14:19 GMT+7** — Global skills upgraded: `full (42)` → `lab (47)` via `npx -y arra-oracle-skills@26.4.18 install -g -y -p lab`. Both global and project-local now lab(47). Closes the "Pending sync" item open since 2026-05-08.
 
 ---
 
@@ -153,9 +157,9 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 - **Optional**: restart Claude Code to activate OMC HUD statusline (configured but needs restart to render)
 - **Decision pending**: keep aree-home as sole writer, or run multi-machine writer (likely sole writer per home-server-architecture.md plan)
 
-### Pending propagation to sister machines (RDLT, DESKTOP-CE4H6GT)
-- **oh-my-claudecode plugin** (v4.13.7) — install via `/plugin install oh-my-claudecode` after `/plugin marketplace add https://github.com/Yeachan-Heo/oh-my-claudecode`. Test on aree-home first (this session) to confirm no conflict with Aree's CLAUDE.md identity layer before propagating.
-- **HUD statusline** — auto-installed by `/oh-my-claudecode:setup` wizard, no manual step needed beyond running the wizard.
+### Pending propagation to sister machines
+- ~~**oh-my-claudecode plugin** (v4.13.7) — install via `/plugin install oh-my-claudecode` after `/plugin marketplace add https://github.com/Yeachan-Heo/oh-my-claudecode`.~~ DESKTOP-CE4H6GT ✅ done 2026-05-12 ~14:10. RDLT: not yet (next time Toey is on home machine).
+- **HUD statusline** — auto-installed by `/oh-my-claudecode:setup` wizard, no manual step needed beyond running the wizard. DESKTOP-CE4H6GT pending: wizard not yet run (plugin installed bare, no setup wizard yet).
 
 ### Removed / Excluded
 - **XCP-ng** — was inherited on this hardware, wiped 2026-05-11 at install time. No data preserved (Toey confirmed nothing of value).
