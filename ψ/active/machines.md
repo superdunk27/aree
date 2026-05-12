@@ -63,7 +63,7 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 **User**: toey0 (`RDLT\toey0`)
 **Hardware**: ASUS PRIME B450M-A (S/N 200670633200021), AMD Ryzen 7 3700X (8c/16t), BIOS AMI 4622
 **Original install date**: 09-Nov-2025
-**Last-updated**: 2026-05-12 ~19:25 GMT+7 (OMC plugin v4.13.7 confirmed present — manifest drift caught; Tailscale + SSH alias `aree` set up; DESKTOP pubkey authorized on aree-home from this machine)
+**Last-updated**: 2026-05-12 ~20:40 GMT+7 (Phase 1 closed on RDLT: Windows Terminal profile "Aree (aree-home)" + Desktop\Aree.lnk shortcut. End-to-end double-click verified.)
 
 > **Note 2026-05-10**: This is the SAME physical machine previously documented as "TOEY". The "TOEY" name was never verified by `$env:COMPUTERNAME` — it was inferred. `/sync` today caught actual hostname = `RDLT`. The prior TOEY section is preserved below as superseded history (Nothing is Deleted).
 
@@ -81,6 +81,8 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 | **oh-my-claudecode plugin** | **v4.13.7** at `~/.claude/plugins/marketplaces/omc/` (was installed prior to 2026-05-12, manifest never recorded — confirmed present 2026-05-12 ~19:25) |
 | **Tailscale** | 1.x at `100.111.92.57` (node name `rdlt`, online) |
 | **SSH alias `aree`** | `~/.ssh/config` set 2026-05-12 → `HostName 100.77.60.57` + `RemoteCommand tmux attach -t aree \|\| tmux new -s aree`. ed25519 key already in aree-home `authorized_keys` since 2026-05-11 install |
+| **Windows Terminal profile** | "Aree (aree-home)" → `commandline: ssh aree`. Installed 2026-05-12 via `aree-install.ps1` (scp'd from aree-home). Visible in WT dropdown. |
+| **Desktop shortcut** | `~\Desktop\Aree.lnk` → `wt.exe -p "Aree (aree-home)"`. Double-click launches Aree session directly. ✓ end-to-end verified 2026-05-12 |
 | arduino-cli | 1.4.1 (`C:\Program Files\Arduino CLI\arduino-cli.exe`) |
 | ESP32 core | esp32:esp32 3.3.8 |
 | Chronojump | installed → deprioritized (UX too clunky, dropped 2026-05-07) |
@@ -95,6 +97,7 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 - ✅ **Skills parity** — both at lab (47) since 2026-05-12 (DESKTOP upgraded full(42)→lab(47) earlier today).
 - ✅ **OMC plugin parity** — both at v4.13.7 (DESKTOP installed 2026-05-12 ~14:10; RDLT confirmed already present 2026-05-12 ~19:25).
 - ✅ **SSH alias parity** — both have `Host aree` block; both pubkeys in aree-home `authorized_keys`.
+- ⚠️ **Phase 1 desktop ergonomics** — RDLT done 2026-05-12 ~20:40 (Windows Terminal profile + Desktop\Aree.lnk). DESKTOP pending — same `aree-install.ps1` flow when Toey at DESKTOP next.
 
 ### History
 - **2026-05-07 evening** — Day 3 jump mat work session. Setup expansion: skills standard→full, MCP +context7 +playwright -oracle-v2, arduino-cli + ESP32 core via winget. Documented in `ψ/memory/retrospectives/2026-05/07/22.29_jump-mat-day3-setup-firmware-validators.md`.
@@ -105,6 +108,7 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 - **2026-05-12 ~19:22 GMT+7** — SSH from RDLT → aree-home tested: works with existing ed25519 key from 2026-05-11 install. DESKTOP-CE4H6GT pubkey (`ssh-ed25519 …DK7sad1kfXVzaKfVRDvvyH7l5A2e7XUh9EfyWnsOX4n desktop-ce4h6gt-toey-2026-05-12`) appended to aree-home `~/.ssh/authorized_keys`. Phase 1.1 closes for DESKTOP — first `ssh aree` from work will succeed.
 - **2026-05-12 ~19:23 GMT+7** — `Host aree` block written to RDLT's `~/.ssh/config` (HostName 100.77.60.57, RemoteCommand tmux attach). Connectivity tested via `ssh -F config -o RemoteCommand=none aree hostname` → returned `aree-home` ✓. Phase 1.1 closes for RDLT.
 - **2026-05-12 ~19:25 GMT+7** — OMC plugin found pre-installed at `~/.claude/plugins/marketplaces/omc/` v4.13.7. Manifest claimed "RDLT pending OMC install" since 2026-05-11 — actually present. **4th manifest drift this week** (see drift lesson note below).
+- **2026-05-12 ~20:40 GMT+7** — Phase 1.2 + 1.3 closed on RDLT. `aree-install.ps1` (written on aree-home at `~/aree-install.ps1`, scp'd to RDLT and executed via `powershell -ExecutionPolicy Bypass -File`) created Windows Terminal profile "Aree (aree-home)" and `~\Desktop\Aree.lnk` shortcut. Both tested end-to-end: WT dropdown shows the profile, double-click Desktop\Aree.lnk → Windows Terminal opens → `ssh aree` → tmux session on aree-home. Phase 1 success criteria met: launch via double-click, zero command memorization. Process gotcha for next time: first PowerShell paste landed in CMD (not PowerShell — banner mismatch detected after `Write-Host` errors); second paste hit PowerShell but multi-line block broke on re-paste (`>>` continuation confusion). Final fix was scp + run-from-file approach which becomes the canonical pattern for DESKTOP repeat. Script `~/aree-install.ps1` left on aree-home as reusable installer.
 - **Manifest drift lesson (4 instances this week)**: 2026-05-08 (skills count "full(42)" vs actual 29), 2026-05-09 (skill format flat vs directory), 2026-05-10 (hostname "TOEY" vs RDLT), 2026-05-12 (OMC plugin "pending" vs already installed). All four: documented value taken as authoritative without verification. Reinforces lesson in `ψ/memory/learnings/2026-05-09_manifest-drift-and-trigger-skill-pattern.md`. The `/sync` skill itself was the cure for the third instance; today's fix required reading the actual filesystem before claiming state.
 
 ---

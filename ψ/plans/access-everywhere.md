@@ -1,6 +1,6 @@
 # Access Aree Everywhere — low-friction multi-channel access
 
-**Status**: Phase 1 in progress. Plan written + executed in same session.
+**Status**: Phase 1 closed on RDLT (2026-05-12 ~20:40 GMT+7). DESKTOP pending — same `aree-install.ps1` flow when at DESKTOP next. Phase 2-4 pending.
 **Date written**: 2026-05-11
 **Trigger phrase**: "คุยกับคุณที่ไหนก็ได้" / "ทำให้คุย Aree ง่ายขึ้น" / "access everywhere"
 
@@ -250,10 +250,20 @@ tailscale serve status
 ## Resolution log (จะ append เมื่อทำเสร็จแต่ละ phase)
 
 ### Phase 1 — RDLT
-*(in progress, จะ update เมื่อ Toey ทดสอบ desktop shortcut)*
+- **2026-05-12 ~19:23 GMT+7** — Step 1.1: SSH alias `aree` set in `~/.ssh/config`. Verified `ssh -F config -o RemoteCommand=none aree hostname` → `aree-home` ✓ (commit `cd41f55`).
+- **2026-05-12 ~20:40 GMT+7** — Step 1.2 (Windows Terminal profile) + 1.3 (Desktop\Aree.lnk shortcut) closed via `aree-install.ps1` (written on aree-home at `~/aree-install.ps1`, scp'd to RDLT, run with `powershell -ExecutionPolicy Bypass -File .\aree-install.ps1`). End-to-end verified by Toey: WT dropdown shows "Aree (aree-home)"; Desktop shortcut double-click → opens Aree session. ✅ Phase 1 RDLT complete.
+
+### Phase 1 — DESKTOP-CE4H6GT
+- **2026-05-12 (afternoon)** — Step 1.1: SSH alias `aree` set on DESKTOP, pubkey authorized on aree-home (commit `e529348`).
+- **Pending**: Step 1.2 + 1.3. Same `aree-install.ps1` flow — when Toey is at DESKTOP next, run in PowerShell:
+  ```powershell
+  scp -o RemoteCommand=none aree:aree-install.ps1 .
+  powershell -ExecutionPolicy Bypass -File .\aree-install.ps1
+  ```
+  Script is idempotent (re-run safe). Tests same as RDLT: WT dropdown + Desktop double-click.
 
 ### Phase 2 — Android
-*(pending)*
+*(pending — Phase 1 across both Windows machines must close first per success criteria)*
 
 ### Phase 3 — Web terminal
 *(pending)*
