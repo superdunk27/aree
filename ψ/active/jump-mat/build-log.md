@@ -4,6 +4,36 @@ Append-only chronological log. Newest entries at top.
 
 ---
 
+## 2026-05-12 (~22:35 GMT+7) — Parts arrived complete, build deferred
+
+**Status**: Phase 1 unblocked on materials, deferred on scheduling
+**Active session**: Aree (with Toey) — check-in only, not a build session
+
+### Done today
+- Toey confirmed all shipped parts arrived (PCB×4 20×30cm Epoxy 1.5mm, 100nF capacitor, plywood 30×60×6mm — matched the Day 3 pending list)
+- No build started: Toey is "at work" tonight, the soldering iron + breadboard + jump-mat materials live at home
+
+### Pending Toey before Day 4
+- Be at home with workspace + tools
+- Pick a 1.5–2 hour slot (Day 4 plan in this log under "2026-05-07 (evening) → Next session", steps 1-8)
+
+### Next session (Day 4 build)
+1. Solder wires to PCB corners (diagonal pattern per build-spec section 1.5)
+2. Apply foam tape grid spacer (perimeter + cross bar = 2 windows per pair)
+3. Assemble 6-layer stack (vinyl / PCB / tape / PCB / plywood / EVA)
+4. Breadboard ESP32 WROOM-32 + 10kΩ pull-up + 100nF noise filter
+5. **MT3608 set 5V output BEFORE connecting ESP32** (skipping this = ESP32 cooked)
+6. Flash `firmware/jumpmat_phase1/jumpmat_phase1.ino`
+7. Run Serial monitor test (firmware/README.md test plan)
+8. Calibrate against phone slow-mo 240fps (Sargent reference, build-spec section 6)
+
+### Note
+- Build deferred from 2026-05-08 (parts shipping) → 2026-05-12 (parts arrived). Net wait: 4 days
+- Between those dates: home-server arc (designed 05-08, deployed 05-11), access-everywhere Phases 1+2+3 (closed 05-12). Jump-mat workspace not blocked by software; it was just waiting on physical parts
+- Aree's CLAUDE.md note on peer-learning mode applies to *training/sport-science* topics — jump-mat hardware is plain build territory, normal mode
+
+---
+
 ## 2026-05-08 (morning) — Day 3.5: Phase 1.5 BLE design + new machine sync
 
 **Status**: Phase 1 unchanged (still waiting on parts). Phase 1.5 design locked.
