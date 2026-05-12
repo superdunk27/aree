@@ -63,7 +63,7 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 **User**: toey0 (`RDLT\toey0`)
 **Hardware**: ASUS PRIME B450M-A (S/N 200670633200021), AMD Ryzen 7 3700X (8c/16t), BIOS AMI 4622
 **Original install date**: 09-Nov-2025
-**Last-updated**: 2026-05-10 ~00:00 GMT+7 (`/sync` ran, hostname surfaced as RDLT not TOEY — supersedes prior section)
+**Last-updated**: 2026-05-12 ~19:25 GMT+7 (OMC plugin v4.13.7 confirmed present — manifest drift caught; Tailscale + SSH alias `aree` set up; DESKTOP pubkey authorized on aree-home from this machine)
 
 > **Note 2026-05-10**: This is the SAME physical machine previously documented as "TOEY". The "TOEY" name was never verified by `$env:COMPUTERNAME` — it was inferred. `/sync` today caught actual hostname = `RDLT`. The prior TOEY section is preserved below as superseded history (Nothing is Deleted).
 
@@ -78,6 +78,9 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 | Oracle skills | **lab (47)** — `arra-oracle-skills@26.4.18` (upgraded today from 29 actual / "full" claim) |
 | MCP servers | `context7` ✓, `playwright` ✓, `firecrawl` ✓, `plugin:oh-my-claudecode:t` ✓ |
 | MCP claude.ai | Google Drive / Calendar / Gmail (needs auth — not used yet) |
+| **oh-my-claudecode plugin** | **v4.13.7** at `~/.claude/plugins/marketplaces/omc/` (was installed prior to 2026-05-12, manifest never recorded — confirmed present 2026-05-12 ~19:25) |
+| **Tailscale** | 1.x at `100.111.92.57` (node name `rdlt`, online) |
+| **SSH alias `aree`** | `~/.ssh/config` set 2026-05-12 → `HostName 100.77.60.57` + `RemoteCommand tmux attach -t aree \|\| tmux new -s aree`. ed25519 key already in aree-home `authorized_keys` since 2026-05-11 install |
 | arduino-cli | 1.4.1 (`C:\Program Files\Arduino CLI\arduino-cli.exe`) |
 | ESP32 core | esp32:esp32 3.3.8 |
 | Chronojump | installed → deprioritized (UX too clunky, dropped 2026-05-07) |
@@ -89,14 +92,20 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 
 ### Gaps vs DESKTOP-CE4H6GT (work machine)
 - ✅ **Firecrawl MCP** — installed 2026-05-08. Now matches work machine. API key stored in `~/.claude.json` env (per-machine, not in repo).
-- ⚠️ Skills count differs: TOEY = lab (47), DESKTOP = full (42). On next work-machine session, propose upgrade DESKTOP → lab (47) so both match. Tracked in DESKTOP's "Pending sync" section above.
+- ✅ **Skills parity** — both at lab (47) since 2026-05-12 (DESKTOP upgraded full(42)→lab(47) earlier today).
+- ✅ **OMC plugin parity** — both at v4.13.7 (DESKTOP installed 2026-05-12 ~14:10; RDLT confirmed already present 2026-05-12 ~19:25).
+- ✅ **SSH alias parity** — both have `Host aree` block; both pubkeys in aree-home `authorized_keys`.
 
 ### History
 - **2026-05-07 evening** — Day 3 jump mat work session. Setup expansion: skills standard→full, MCP +context7 +playwright -oracle-v2, arduino-cli + ESP32 core via winget. Documented in `ψ/memory/retrospectives/2026-05/07/22.29_jump-mat-day3-setup-firmware-validators.md`.
 - **2026-05-08 ~22:30** — Hostname confirmed = TOEY (was TBD). Skills upgraded full→lab via `npx arra-oracle-skills@26.4.18 install -g -y -p lab` (29→47, +18 skills documented in `ψ/memory/learnings/2026-05-08_oracle101-gap-review.md`). ψ/metrics/ created. CLAUDE.md updated with workflow patterns from oracle101 Ch 06B-10.
 - **2026-05-08 ~22:45** — Firecrawl MCP installed (matched DESKTOP-CE4H6GT). Local skill `.claude/skills/sync.md` created — typing `sync` or `/sync` in any session triggers cross-machine state check + propose alignment.
 - **2026-05-10 ~00:00** — `/sync` ran for the first time. `$env:COMPUTERNAME` returned **`RDLT`** (not "TOEY" as documented). All other state matched the prior "TOEY" section exactly (skills lab/47, all 4 MCP, arduino-cli, ESP32 3.3.8, Chronojump, no yt-dlp/ffmpeg). Hardware confirmed by Toey: ASUS B450M-A + Ryzen 7 3700X. Conclusion: same physical machine, "TOEY" was never an actual hostname — it was inferred. Section renamed RDLT, prior history preserved. `.claude/skills/sync/SKILL.md` updated. Skill format also fixed in same session: flat `sync.md` → `sync/SKILL.md` (commit `83b59be`).
-- **Manifest drift lesson (3rd instance this week)**: 2026-05-08 (skills count "full(42)" vs actual 29), 2026-05-09 (skill format flat vs directory), 2026-05-10 (hostname "TOEY" vs RDLT). All three: documented value taken as authoritative without verification. Reinforces lesson in `ψ/memory/learnings/2026-05-09_manifest-drift-and-trigger-skill-pattern.md`. The `/sync` skill itself was the cure for the third instance.
+- **2026-05-12 ~19:18 GMT+7** — `git pull` brought DESKTOP handoff (`ψ/inbox/2026-05-12_desktop-ssh-handoff.md`). Hostname verified via `$env:COMPUTERNAME` = `RDLT` ✓. Tailnet status: RDLT online (`100.111.92.57`), aree-home online, DESKTOP/phone offline.
+- **2026-05-12 ~19:22 GMT+7** — SSH from RDLT → aree-home tested: works with existing ed25519 key from 2026-05-11 install. DESKTOP-CE4H6GT pubkey (`ssh-ed25519 …DK7sad1kfXVzaKfVRDvvyH7l5A2e7XUh9EfyWnsOX4n desktop-ce4h6gt-toey-2026-05-12`) appended to aree-home `~/.ssh/authorized_keys`. Phase 1.1 closes for DESKTOP — first `ssh aree` from work will succeed.
+- **2026-05-12 ~19:23 GMT+7** — `Host aree` block written to RDLT's `~/.ssh/config` (HostName 100.77.60.57, RemoteCommand tmux attach). Connectivity tested via `ssh -F config -o RemoteCommand=none aree hostname` → returned `aree-home` ✓. Phase 1.1 closes for RDLT.
+- **2026-05-12 ~19:25 GMT+7** — OMC plugin found pre-installed at `~/.claude/plugins/marketplaces/omc/` v4.13.7. Manifest claimed "RDLT pending OMC install" since 2026-05-11 — actually present. **4th manifest drift this week** (see drift lesson note below).
+- **Manifest drift lesson (4 instances this week)**: 2026-05-08 (skills count "full(42)" vs actual 29), 2026-05-09 (skill format flat vs directory), 2026-05-10 (hostname "TOEY" vs RDLT), 2026-05-12 (OMC plugin "pending" vs already installed). All four: documented value taken as authoritative without verification. Reinforces lesson in `ψ/memory/learnings/2026-05-09_manifest-drift-and-trigger-skill-pattern.md`. The `/sync` skill itself was the cure for the third instance; today's fix required reading the actual filesystem before claiming state.
 
 ---
 
@@ -158,7 +167,7 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 - **Decision pending**: keep aree-home as sole writer, or run multi-machine writer (likely sole writer per home-server-architecture.md plan)
 
 ### Pending propagation to sister machines
-- ~~**oh-my-claudecode plugin** (v4.13.7) — install via `/plugin install oh-my-claudecode` after `/plugin marketplace add https://github.com/Yeachan-Heo/oh-my-claudecode`.~~ DESKTOP-CE4H6GT ✅ done 2026-05-12 ~14:10. RDLT: not yet (next time Toey is on home machine).
+- ~~**oh-my-claudecode plugin** (v4.13.7) — install via `/plugin install oh-my-claudecode` after `/plugin marketplace add https://github.com/Yeachan-Heo/oh-my-claudecode`.~~ DESKTOP-CE4H6GT ✅ done 2026-05-12 ~14:10. RDLT ✅ confirmed pre-installed 2026-05-12 ~19:25 (manifest drift — see RDLT history).
 - **HUD statusline** — auto-installed by `/oh-my-claudecode:setup` wizard, no manual step needed beyond running the wizard. DESKTOP-CE4H6GT pending: wizard not yet run (plugin installed bare, no setup wizard yet).
 
 ### Removed / Excluded
@@ -174,6 +183,7 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 - **2026-05-11 ~15:40 GMT+7** — Claude Code first-run login complete (browser OAuth, in-tmux). claude.ai bundle MCPs auto-registered: Google Drive / Calendar / Gmail (OAuth flow not run yet, status: "needs authentication"). plugin marketplace `omc` added (`/plugin marketplace add https://github.com/Yeachan-Heo/oh-my-claudecode`). Plugin `oh-my-claudecode@omc` installed (v4.13.7). `/plugin install` reported "Reloaded: 1 plugin · 1 skill · 24 agents · 24 hooks · 1 plugin MCP server".
 - **2026-05-11 ~15:45 GMT+7** — `/oh-my-claudecode:setup` wizard ran (global scope, overwrite mode — no prior `~/.claude/CLAUDE.md` existed). Installed: OMC canonical CLAUDE.md, `omc-reference` skill (`~/.claude/skills/omc-reference/`), HUD wrapper (`~/.claude/hud/omc-hud.mjs` + `lib/config-dir.mjs`), statusLine configured in `~/.claude/settings.json` using `node ${CLAUDE_CONFIG_DIR:-$HOME/.claude}/hud/omc-hud.mjs` (forward slashes, portable). Enabled `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` in settings.json. `.omc-config.json` written with `defaultExecutionMode=ultrawork`, `taskTool=builtin`, team defaults `maxAgents=3 + defaultAgentType=claude`. **Failures (non-blocking)**: OMC CLI npm install (`npm install -g oh-my-claude-sisyphus`) failed EACCES on `/usr/lib/node_modules` (needs sudo, deferred); Ruby for Ralph workflows missing (deferred — `sudo apt install ruby-full`).
 - **2026-05-11 ~16:00 GMT+7** — `/sync` ran for the first time on aree-home. Hostname `hostname` returned **`aree-home`** ✓ matches manifest section. State diff identified 6 drift/new items vs manifest (Claude Code login, OMC plugin v4.13.7, OMC HUD, agent teams env, OMC global CLAUDE.md, claude.ai MCP triplet now registered) — all are intentional outcomes of the install workflow, not unwanted drift. Decided to **commit `.claude/skills/` (47 oracle + sync local + 2 metadata files) into the repo** — `aree-home` install scope is project-local (`~/projects/aree/.claude/skills/`) intentionally so that the skill set syncs across machines via `git pull` together with `ψ/`. RDLT/DESKTOP continue to use global `~/.claude/skills/` scope; future propagation could converge them to project-local but that's deferred. machines.md updated and committed in the same change.
+- **2026-05-12 ~19:22 GMT+7** — DESKTOP-CE4H6GT pubkey appended to `~/.ssh/authorized_keys` (via RDLT → ssh aree-home → echo). authorized_keys now holds 2 keys: aree-home self (`superdunk27@github`) + DESKTOP (`desktop-ce4h6gt-toey-2026-05-12`). RDLT uses the same `superdunk27@github` key already there. Phase 1.1 SSH alias for the whole fleet now functional from all three machines via Tailscale.
 
 ### Architecture (resolved 2026-05-10, executed 2026-05-11)
 
