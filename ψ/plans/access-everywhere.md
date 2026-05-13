@@ -1,6 +1,6 @@
 # Access Aree Everywhere — low-friction multi-channel access
 
-**Status**: Phase 1 closed on RDLT (2026-05-12 ~20:40) and DESKTOP-CE4H6GT (2026-05-13 ~08:04). Phase 2 (Android Termius) closed 2026-05-12 ~21:10. Phase 3 (Web ttyd via Tailscale Serve) closed 2026-05-12 ~22:00 on RDLT. Phase 4 deferred. Phase 3 propagation to DESKTOP/Phone pending.
+**Status**: Phase 1 closed on RDLT (2026-05-12 ~20:40) and DESKTOP-CE4H6GT (2026-05-13 ~08:04). Phase 2 (Android Termius) closed 2026-05-12 ~21:10. Phase 3 (Web ttyd via Tailscale Serve) closed 2026-05-12 ~22:00 on RDLT, propagation to ROG Phone closed 2026-05-13 ~09:55 (browser/ttyd became the *primary* Thai-input path on phone, replacing Termius for typing). Phase 4 deferred. Phase 3 propagation to DESKTOP-CE4H6GT pending.
 **Date written**: 2026-05-11
 **Trigger phrase**: "คุยกับคุณที่ไหนก็ได้" / "ทำให้คุย Aree ง่ายขึ้น" / "access everywhere"
 
@@ -275,7 +275,7 @@ tailscale serve status
 
 **Pending Phase 3 propagation to other clients**:
 - **DESKTOP-CE4H6GT** — likely same Windows DNS gotcha; expect to add the same hosts line.
-- **ROG Phone** — Android phone using MagicDNS through Tailscale app should resolve natively (no hosts workaround). Test next time online.
+- **ROG Phone** — ✅ closed 2026-05-13 ~09:55. Chrome on Android resolved `aree-home.tail9e69b1.ts.net` via MagicDNS natively (no hosts workaround needed, as predicted). End-to-end verified by Toey: "เล่นผ่านเว็บใช้ได้". **Surprise upgrade**: ttyd-in-browser is now the *primary* phone path for Thai input, not just a fallback — Termius free tier has an Android text-rendering bug that duplicates Thai consonants before combining marks (e.g. "ผมชื่อ" → displays as "ผมชชชื่อ"; bytes on the wire are correct, render is wrong, fonts don't help). Chrome uses Android's system text shaper (Noto Sans Thai + HarfBuzz) which handles combining clusters correctly. Diagnosis + workaround written up in `ψ/memory/learnings/2026-05-13_termius-thai-combining-bug.md`.
 - **Any third-party device** — needs to be on the tailnet *and* either resolve MagicDNS natively or have the hosts entry.
 
 **Browser-ttyd UX caveats (vs Windows Terminal / Termius)**:
