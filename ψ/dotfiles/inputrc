@@ -1,0 +1,18 @@
+# Thai / UTF-8 readline behavior — aree-home fleet
+#
+# Default Ubuntu /etc/inputrc has `set convert-meta off` commented out,
+# leaving convert-meta=on which mangles UTF-8 multi-byte characters
+# (Thai is 3 bytes/char). That makes backspace delete one byte at a
+# time instead of one character — visible as "1 backspace = 2-3 chars
+# gone" with Thai input. Forcing the three meta settings below makes
+# readline treat the high bytes as part of multi-byte characters
+# (and pass them through to the display unchanged).
+
+set input-meta on
+set output-meta on
+set convert-meta off
+
+# Bracketed paste — terminal tells bash when pasted text begins/ends.
+# Pasted Thai (or any) text won't be interpreted as keystrokes (no
+# accidental Enter mid-paste, no key-by-key readline expansion).
+set enable-bracketed-paste on

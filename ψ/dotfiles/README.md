@@ -31,6 +31,7 @@ Effects:
 | `bashrc-aree-home.sh` | SSH-aware auto-attach into tmux session `aree` (server-side workaround for Termius free-tier missing startup-command field) |
 | `aree-web.service` | systemd user unit that runs ttyd → tmux `aree` on `127.0.0.1:7681` so Tailscale Serve can proxy it as `https://aree-home.tail9e69b1.ts.net/` for browser access |
 | `aree-install.ps1` | Windows client installer — creates Windows Terminal profile `Aree (aree-home)` + `Desktop\Aree.lnk` shortcut for 1-action access to the Aree tmux session. Idempotent. The canonical "live" copy that clients `scp` from also sits at `~/aree-install.ps1` on aree-home; this is the disaster-recovery copy in git. |
+| `inputrc` | bash readline config — fixes Thai/UTF-8 input on terminals (especially mobile Termius) by setting `convert-meta off` so backspace deletes one Thai character not one UTF-8 byte. Adds `enable-bracketed-paste` for safer pasting. |
 
 ## Install / Restore on a fresh aree-home
 
@@ -51,8 +52,14 @@ cat >> ~/.bashrc <<'EOF'
 [ -f ~/projects/aree/ψ/dotfiles/bashrc-aree-home.sh ] && . ~/projects/aree/ψ/dotfiles/bashrc-aree-home.sh
 EOF
 
+# .inputrc — readline config (Thai UTF-8 fix)
+cat > ~/.inputrc <<'EOF'
+$include ~/projects/aree/ψ/dotfiles/inputrc
+EOF
+
 # Reload tmux if a session is already running
 tmux source-file ~/.tmux.conf 2>/dev/null
+# To apply inputrc in current shell: `bind -f ~/.inputrc`. New shells pick it up automatically.
 ```
 
 ## Install / Restore Phase 3 (browser channel via ttyd + Tailscale Serve)
