@@ -1,6 +1,6 @@
 # Access Aree Everywhere — low-friction multi-channel access
 
-**Status**: Phase 1 closed on RDLT (2026-05-12 ~20:40) and DESKTOP-CE4H6GT (2026-05-13 ~08:04). Phase 2 (Android Termius) closed 2026-05-12 ~21:10. Phase 3 (Web ttyd via Tailscale Serve) closed 2026-05-12 ~22:00 on RDLT, propagation to ROG Phone closed 2026-05-13 ~09:55 (browser/ttyd became the *primary* Thai-input path on phone, replacing Termius for typing). Phase 4 deferred. Phase 3 propagation to DESKTOP-CE4H6GT pending.
+**Status**: Phase 1 closed on RDLT (2026-05-12 ~20:40) and DESKTOP-CE4H6GT (2026-05-13 ~08:04). Phase 2 (Android Termius) closed 2026-05-12 ~21:10, **superseded as primary** 2026-05-13 ~13:00 by Phase 2b (Termux from F-Droid + ssh from `aree` alias) — Termux renders Thai correctly *and* gives touch-swipe scrollback, so it is now the daily driver on the phone; Termius is the last-resort fallback. Phase 3 (Web ttyd via Tailscale Serve) closed 2026-05-12 ~22:00 on RDLT, propagation to ROG Phone closed 2026-05-13 ~09:55. Phase 4 deferred. Phase 3 propagation to DESKTOP-CE4H6GT pending.
 **Date written**: 2026-05-11
 **Trigger phrase**: "คุยกับคุณที่ไหนก็ได้" / "ทำให้คุย Aree ง่ายขึ้น" / "access everywhere"
 
@@ -266,6 +266,23 @@ tailscale serve status
 
 **Caveat noted**: shared tmux view resizes window to smallest attached client. When phone + RDLT attach simultaneously, RDLT terminal shows in 80x36 worth of space. `aggressive-resize on` or grouped sessions can fix it — deferred until actual pain.
 
+### Phase 2b — Android Termux (added 2026-05-13 — supersedes Termius as the daily-driver phone path)
+
+Motivation: Termius free tier on Android cannot render Thai combining marks (duplicates the base consonant — see `ψ/memory/learnings/2026-05-13_termius-thai-combining-bug.md`). Chrome+ttyd from Phase 3 fixes the rendering but inherits tmux's `mouse on` setting, which swallows touch swipes — leaving phone-side scrollback effectively unreachable without a hardware Ctrl key. **Termux solves both at once**: it ships with an extra-keys row (Ctrl, Esc, Tab, arrows) so tmux copy-mode is reachable, and it renders Thai correctly via the Linux/Android text-shaping pipeline.
+
+- **2026-05-13 ~12:40 GMT+7** — Termux installed from **F-Droid** (the Play Store build has been deprecated since 2020; confirmed it does not start a working shell on current Android). `pkg update && pkg upgrade`, then `pkg install openssh tmux git nano`.
+- **2026-05-13 ~12:50 GMT+7** — `ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_aree -C rog-phone-termux` generated the per-device key. Fingerprint `SHA256:bCmeXA5gxsLVhWqaF+Upd9jNwsFeYK+No73TwNbpLxk`. Pubkey copy-pasted to chat; Aree verified the fingerprint match server-side and appended the key to `~/.ssh/authorized_keys` (now 4 keys: `gh:superdunk27`, DESKTOP, ROG-Termius, ROG-Termux).
+- **2026-05-13 ~13:00 GMT+7** — `~/.ssh/config` write attempts kept getting wrecked by markdown soft-wrap during copy-paste from chat (hard newlines inserted at wrap points; bash heredoc `EOF` ended up indented and never terminated; `chmod 600` got split from its operand). Symptom was an unparseable config that broke *every* subsequent `ssh` invocation with `Bad configuration option`, even bare ones. Lesson: prefer single-line `printf` or short `echo >> file` calls when guiding a phone user through copy-paste, and `rm ~/.ssh/config` is the right hammer when it gets corrupted. Recovery: `rm ~/.ssh/config`, then connected directly with `ssh -i ~/.ssh/id_ed25519_aree toey@100.77.60.57` — aree-home's bashrc auto-attach landed inside tmux session `aree`. Verified by Toey: "โย่วๆๆๆ เข้ามา termux แล้ว" — Thai rendered without duplication, end-to-end working.
+- **2026-05-13 ~13:10 GMT+7** — Touch-swipe scrolling works inside Termux+tmux ("เลื่อนได้แต่ต้องเลื่อนช้าๆเพราะมันเร็วมาก"). For precise scrollback Toey can use tmux copy-mode (`Ctrl-b [` via the Termux Ctrl extra-key, then `Vol-Up + P/N` for PgUp/PgDn, `q` to exit). Touch swipe is acceptable for everyday "scroll up to see history" use.
+- **2026-05-13 ~13:15 GMT+7** — Shell alias `alias aree="ssh -i ~/.ssh/id_ed25519_aree toey@100.77.60.57"` appended to Termux's `~/.bashrc` so the daily reconnect is one word: `aree`. (No `~/.ssh/config` — the alias route is simpler than fighting the heredoc-paste failure mode and meets the same "one short command" bar Phase 2 set.)
+
+**Phase 2b success criteria**: Open Termux app → fresh session → type `aree` Enter → inside Aree's tmux within 2 seconds, with Thai input rendering correctly and tmux scrollback reachable. ✅ Met.
+
+**Caveats / things to note**:
+- Termux's `~/.ssh/` lives at `/data/data/com.termux/files/home/.ssh/` (sandboxed app storage). Backing it up requires Termux storage helper (`termux-setup-storage`) plus deliberate copy, not the regular Android file picker.
+- Per-device key, no sync to Termius vault — losing the phone means revoking only this key, not the Termius one.
+- Volume keys are remapped by Termux for terminal use (Vol-Up = modifier for arrows/PgUp/PgDn, Vol-Down = Ctrl). If Toey wants regular Android volume control while Termux has focus, Termux Properties (`~/.termux/termux.properties`) can disable the mapping per-session, but the trade-off is losing the convenience keys.
+
 ### Phase 3 — Web terminal (browser via Tailscale Serve)
 - **2026-05-12 ~21:30 GMT+7** — Step 3.1: `sudo apt install -y ttyd` → 1.7.7 from universe. **Gotcha**: the package ships an enabled system-level `ttyd.service` that runs as root with `/bin/login` and grabs port 7681 silently. First boot of our user service failed with `EADDRINUSE`. Fix: `sudo systemctl disable --now ttyd.service && sudo systemctl mask ttyd.service`.
 - **2026-05-12 ~21:35 GMT+7** — Step 3.2: user systemd unit at `~/.config/systemd/user/aree-web.service` launches `/usr/bin/ttyd --writable --port 7681 --interface 127.0.0.1 /usr/bin/tmux new-session -A -s aree`. Restart on failure, 5s backoff. Bound to localhost only so the only path in is via Tailscale Serve.
@@ -275,7 +292,7 @@ tailscale serve status
 
 **Pending Phase 3 propagation to other clients**:
 - **DESKTOP-CE4H6GT** — likely same Windows DNS gotcha; expect to add the same hosts line.
-- **ROG Phone** — ✅ closed 2026-05-13 ~09:55. Chrome on Android resolved `aree-home.tail9e69b1.ts.net` via MagicDNS natively (no hosts workaround needed, as predicted). End-to-end verified by Toey: "เล่นผ่านเว็บใช้ได้". **Surprise upgrade**: ttyd-in-browser is now the *primary* phone path for Thai input, not just a fallback — Termius free tier has an Android text-rendering bug that duplicates Thai consonants before combining marks (e.g. "ผมชื่อ" → displays as "ผมชชชื่อ"; bytes on the wire are correct, render is wrong, fonts don't help). Chrome uses Android's system text shaper (Noto Sans Thai + HarfBuzz) which handles combining clusters correctly. Diagnosis + workaround written up in `ψ/memory/learnings/2026-05-13_termius-thai-combining-bug.md`.
+- **ROG Phone** — ✅ closed 2026-05-13 ~09:55. Chrome on Android resolved `aree-home.tail9e69b1.ts.net` via MagicDNS natively (no hosts workaround needed, as predicted). End-to-end verified by Toey: "เล่นผ่านเว็บใช้ได้". **Initially promoted to primary** because Termius free tier has an Android text-rendering bug that duplicates Thai consonants before combining marks (e.g. "ผมชื่อ" → displays as "ผมชชชื่อ"; bytes on the wire are correct, render is wrong, fonts don't help). Chrome uses Android's system text shaper (Noto Sans Thai + HarfBuzz) which handles combining clusters correctly. **Later demoted to secondary** the same day in favor of Termux (see Phase 2b below) — ttyd-in-browser remains the right answer when Termux is not installed or when a browser-only device needs to attach, but Termux gives both correct Thai *and* working touch-swipe scrollback. Diagnosis + workaround written up in `ψ/memory/learnings/2026-05-13_termius-thai-combining-bug.md`.
 - **Any third-party device** — needs to be on the tailnet *and* either resolve MagicDNS natively or have the hosts entry.
 
 **Browser-ttyd UX caveats (vs Windows Terminal / Termius)**:

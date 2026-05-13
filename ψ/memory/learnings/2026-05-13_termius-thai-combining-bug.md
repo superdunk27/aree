@@ -65,3 +65,29 @@ When a terminal client garbles a non-Latin script:
 - Plan: `ψ/plans/access-everywhere.md` (Phase 3 — Web ttyd via Tailscale Serve)
 - Phase 2 setup of Termius itself: same plan, Phase 2 resolution log
 - Earlier attempts at server-side Thai fixes: commit `71e2dc1` (inputrc) and `e215641` (`r` refresh alias) — both useful for Windows clients, neither helps the Termius render bug
+
+## Follow-up (2026-05-13 afternoon) — Termux as the actual primary
+
+The browser/ttyd path solved the Thai render problem, but ttyd in Chrome has a separate friction: tmux `mouse on` swallows touch swipe events, so scrolling tmux scrollback requires entering tmux copy-mode (which on a phone means `Ctrl-b [` — and Chrome's virtual keyboard does not surface Ctrl easily).
+
+In the same session we tried **Termux** as a third phone path:
+
+- Install Termux from **F-Droid** (the Play Store build has been deprecated since 2020 — verified, it does not work).
+- `pkg install openssh tmux git nano`, then `ssh-keygen -t ed25519` for a per-device key (`rog-phone-termux`, fingerprint `bCmeXA5gxsLVhWqaF+Upd9jNwsFeYK+No73TwNbpLxk`), then append the pubkey to aree-home `~/.ssh/authorized_keys` (now 4 keys total: `gh:superdunk27`, DESKTOP, ROG-Termius, ROG-Termux).
+- Connect with `ssh -i ~/.ssh/id_ed25519_aree toey@100.77.60.57` — aree-home's bashrc auto-attach takes over and lands inside tmux session `aree`.
+- Alias `aree` saved into Termux's `~/.bashrc` for one-word reconnect.
+
+Outcome: Termux renders Thai correctly (verified — typing "โย่วๆๆๆ" shows no consonant duplication), **and** touch-swipe scrolls the tmux scrollback usefully (fast but acceptable; for precise scrollback use `Ctrl-b [` → `Vol-Up + P/N` for PgUp/PgDn → `q` to exit copy-mode).
+
+### Revised recommendation (mobile primary path)
+
+| Path | Thai input | Scrolling | When to use |
+|------|-----------|-----------|-------------|
+| **Termux + ssh** | ✓ correct | ✓ touch swipe + tmux copy-mode | **Primary daily driver** — Ctrl available in extra-keys row, Linux-side niceties |
+| Chrome + ttyd | ✓ correct | partial (tmux mouse blocks browser scroll) | Fallback if Termux is unavailable or for a quick browser-only device |
+| Termius (free tier) | ✗ duplicates | toolbar limited | Demoted to last-resort fallback |
+
+### Two gotchas worth recording
+
+1. **Heredoc paste from chat code blocks breaks** when the user's terminal interprets the markdown's soft-wrap as hard newlines: leading whitespace appears before the `EOF` terminator and bash never sees the end-of-heredoc. Symptom: bash sits at the `>` PS2 prompt indefinitely; everything after the would-be terminator (including `chmod`) gets eaten as heredoc body, partially writing the destination file. **Workaround**: prefer single-line `printf` or short `echo >> file` calls over heredocs when guiding a phone user through copy-paste; or have them use `nano` interactively.
+2. **A malformed `~/.ssh/config` breaks every `ssh` invocation**, even bare ones with all options passed on the command line, because ssh parses the config before dispatching. Symptom: `no argument after keyword "remotecommand"` / `Bad configuration option`. Fix: `rm ~/.ssh/config` and either re-create cleanly with `nano` or skip the config entirely and rely on a shell alias to the long `ssh -i ... user@ip` form.
