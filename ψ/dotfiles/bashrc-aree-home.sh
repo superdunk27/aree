@@ -11,3 +11,9 @@
 if [[ -n "$SSH_CONNECTION" && -z "$TMUX" ]] && command -v tmux >/dev/null 2>&1; then
     exec tmux new-session -A -s aree
 fi
+
+# Mobile-friendly refresh alias.
+# Mobile SSH clients (Termius Android free tier) often hide Ctrl modifier so
+# Ctrl+L (clear screen / force redraw) is hard to trigger when Thai rendering
+# desyncs. `r<Enter>` forces a tmux client refresh + screen clear instead.
+alias r='tmux refresh-client 2>/dev/null; clear'
