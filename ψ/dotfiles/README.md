@@ -30,6 +30,7 @@ Effects:
 | `tmux.conf` | mouse on, 50k history, OSC 52 clipboard sync, right-click paste behavior tuned for Windows Terminal / Termius |
 | `bashrc-aree-home.sh` | SSH-aware auto-attach into tmux session `aree` (server-side workaround for Termius free-tier missing startup-command field) |
 | `aree-web.service` | systemd user unit that runs ttyd → tmux `aree` on `127.0.0.1:7681` so Tailscale Serve can proxy it as `https://aree-home.tail9e69b1.ts.net/` for browser access |
+| `aree-install.ps1` | Windows client installer — creates Windows Terminal profile `Aree (aree-home)` + `Desktop\Aree.lnk` shortcut for 1-action access to the Aree tmux session. Idempotent. The canonical "live" copy that clients `scp` from also sits at `~/aree-install.ps1` on aree-home; this is the disaster-recovery copy in git. |
 
 ## Install / Restore on a fresh aree-home
 
@@ -79,6 +80,37 @@ Visit `https://aree-home.tail9e69b1.ts.net/` from any device on the tailnet.
 If a Windows client can't resolve the hostname (Tailscale DNS not adopted),
 fall back to a static entry in `C:\Windows\System32\drivers\etc\hosts`:
 `100.77.60.57 aree-home.tail9e69b1.ts.net` (admin PowerShell).
+
+## Install / Restore Phase 1 on a Windows client (WT profile + Desktop shortcut)
+
+Prerequisite: `~/.ssh/config` already has a `Host aree` block on the client
+(Step 1.1 of the access-everywhere plan) and the client's pubkey is in
+aree-home's `~/.ssh/authorized_keys`. Verified by `ssh -o RemoteCommand=none aree hostname` → `aree-home`.
+
+From PowerShell on the Windows client:
+
+```powershell
+scp -o RemoteCommand=none aree:aree-install.ps1 .
+powershell -ExecutionPolicy Bypass -File .\aree-install.ps1
+```
+
+The script is idempotent — re-run is safe (skips profile/shortcut creation if
+they already exist). It backs up `settings.json` to
+`settings.json.backup.<timestamp>` before editing.
+
+**Keeping the on-server copy in sync**: edits should be made here in
+`ψ/dotfiles/aree-install.ps1`. After committing + pushing, on aree-home:
+
+```bash
+cp ~/projects/aree/ψ/dotfiles/aree-install.ps1 ~/aree-install.ps1
+```
+
+Or one-shot symlink (do this once, then `git pull` keeps everything in sync):
+
+```bash
+mv ~/aree-install.ps1 ~/aree-install.ps1.orig
+ln -s ~/projects/aree/ψ/dotfiles/aree-install.ps1 ~/aree-install.ps1
+```
 
 ## When to add a file here
 

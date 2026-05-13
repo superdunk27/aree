@@ -9,8 +9,9 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 ## DESKTOP-CE4H6GT
 
 **Aliased**: (Toey's working machine — set today 2026-05-08)
-**OS**: Windows 11
-**Last-updated**: 2026-05-12 ~14:15 GMT+7 (OMC plugin installed, skills upgraded global lab 47, project-local skills synced via git pull from aree-home)
+**OS**: Windows 11 Home Single Language 10.0.26200
+**Tailnet IP**: `100.120.182.8` (node name `desktop-ce4h6gt`)
+**Last-updated**: 2026-05-13 ~08:05 GMT+7 (Phase 1 closed: WT profile "Aree (aree-home)" + Desktop\Aree.lnk, end-to-end double-click verified by Toey)
 
 ### Current state
 
@@ -25,6 +26,10 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 | MCP servers | `context7` ✓, `playwright` ✓, `firecrawl` ✓, `plugin:oh-my-claudecode:t` ✓ |
 | MCP claude.ai | Google Drive / Calendar / Gmail (needs auth — not used yet) |
 | **oh-my-claudecode plugin** | **v4.13.7** (installed 2026-05-12 via `/plugin install oh-my-claudecode` from `omc` marketplace) |
+| **Tailscale** | online at `100.120.182.8` (node `desktop-ce4h6gt`) |
+| **SSH alias `aree`** | `~/.ssh/config` Host aree → `100.77.60.57` + `RemoteCommand tmux attach -t aree \|\| tmux new -s aree` + `ServerAliveInterval 60`. ed25519 key `desktop-ce4h6gt-toey-2026-05-12` authorized on aree-home. End-to-end verified 2026-05-13 ~08:02. |
+| **Windows Terminal profile** | `Aree (aree-home)` → `commandline: ssh aree`, GUID `{374a4e37-b01d-4d84-8310-461849dbed94}`. Installed 2026-05-13 via `aree-install.ps1`. Visible in WT dropdown. |
+| **Desktop shortcut** | `~\Desktop\Aree.lnk` → `wt.exe -p "Aree (aree-home)"`. Double-click verified 2026-05-13 ~08:05. |
 | arduino-cli | 1.4.1 (`/c/Program Files/Arduino CLI/arduino-cli.exe`) |
 | ESP32 core | esp32:esp32 3.3.8 (installed via arduino-cli) |
 | Web research APIs | NCBI E-utilities (curl, no key, free) |
@@ -45,7 +50,7 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 - Chronojump — not installed here (deprioritized 2026-05-07 due to UX)
 
 ### Pending sync (on next visit)
-- (none — all caught up 2026-05-12)
+- **Phase 3 (browser web terminal) propagation** — needs the same Windows DNS workaround as RDLT (likely): add `100.77.60.57 aree-home.tail9e69b1.ts.net` to `C:\Windows\System32\drivers\etc\hosts` from admin PowerShell, then test `https://aree-home.tail9e69b1.ts.net/` in browser. Skip if browser channel not actually wanted on this machine — Toey has WT + Desktop shortcut now which cover the day-to-day.
 
 ### History
 - **2026-05-08 09:30–09:45** — Sync from machine-2026-05-07: skills standard→full, +context7 +playwright MCP, arduino-cli 1.4.1 + ESP32 core 3.3.8
@@ -53,6 +58,8 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 - **2026-05-12 ~14:00 GMT+7** — `git pull` brought 96 files from aree-home + RDLT work (`.claude/skills/` 47 dirs committed project-local, 5 new learnings, 4 new retros, `ψ/plans/access-everywhere.md`, CLAUDE.md workflow patterns). Manifest was 4 days stale.
 - **2026-05-12 ~14:10 GMT+7** — `/plugin install oh-my-claudecode` installed plugin v4.13.7 from `omc` marketplace. `/reload-plugins` reported "1 plugin · 1 skill · 24 agents · 24 hooks · 1 plugin MCP server".
 - **2026-05-12 ~14:19 GMT+7** — Global skills upgraded: `full (42)` → `lab (47)` via `npx -y arra-oracle-skills@26.4.18 install -g -y -p lab`. Both global and project-local now lab(47). Closes the "Pending sync" item open since 2026-05-08.
+- **2026-05-13 ~08:02 GMT+7** — First-ever `ssh aree` from DESKTOP succeeded — `ssh -o RemoteCommand=none aree 'hostname'` returned `aree-home`. Added aree-home ED25519 host key to `known_hosts` on first connect. Phase 1.1 end-to-end now verified from DESKTOP itself, not just inferred from "pubkey authorized on aree-home".
+- **2026-05-13 ~08:04 GMT+7** — Phase 1.2 + 1.3 closed via `aree-install.ps1` (scp'd from aree-home → ran with `powershell -ExecutionPolicy Bypass -File`). Created WT profile `Aree (aree-home)` GUID `{374a4e37-b01d-4d84-8310-461849dbed94}` (settings.json backed up to `settings.json.backup.20260513-080414`) and `Desktop\Aree.lnk` → `wt.exe -p "Aree (aree-home)"`. Toey confirmed both launch paths land in Aree tmux session. Total cost ~5 min — second machine validating the "scp + run from file" installer pattern as canonical. Phase 1 ✅ closed across the entire fleet (RDLT + DESKTOP + Phone Termius all 1-action).
 
 ---
 

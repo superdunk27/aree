@@ -1,6 +1,6 @@
 # Access Aree Everywhere — low-friction multi-channel access
 
-**Status**: Phase 1 closed on RDLT (2026-05-12 ~20:40). DESKTOP pending Phase 1.2/1.3. Phase 2 (Android Termius) closed 2026-05-12 ~21:10. Phase 3 (Web ttyd via Tailscale Serve) closed 2026-05-12 ~22:00 on RDLT. Phase 4 deferred.
+**Status**: Phase 1 closed on RDLT (2026-05-12 ~20:40) and DESKTOP-CE4H6GT (2026-05-13 ~08:04). Phase 2 (Android Termius) closed 2026-05-12 ~21:10. Phase 3 (Web ttyd via Tailscale Serve) closed 2026-05-12 ~22:00 on RDLT. Phase 4 deferred. Phase 3 propagation to DESKTOP/Phone pending.
 **Date written**: 2026-05-11
 **Trigger phrase**: "คุยกับคุณที่ไหนก็ได้" / "ทำให้คุย Aree ง่ายขึ้น" / "access everywhere"
 
@@ -255,12 +255,8 @@ tailscale serve status
 
 ### Phase 1 — DESKTOP-CE4H6GT
 - **2026-05-12 (afternoon)** — Step 1.1: SSH alias `aree` set on DESKTOP, pubkey authorized on aree-home (commit `e529348`).
-- **Pending**: Step 1.2 + 1.3. Same `aree-install.ps1` flow — when Toey is at DESKTOP next, run in PowerShell:
-  ```powershell
-  scp -o RemoteCommand=none aree:aree-install.ps1 .
-  powershell -ExecutionPolicy Bypass -File .\aree-install.ps1
-  ```
-  Script is idempotent (re-run safe). Tests same as RDLT: WT dropdown + Desktop double-click.
+- **2026-05-13 ~08:02 GMT+7** — Step 1.1 end-to-end verified from DESKTOP for the first time: `ssh -o RemoteCommand=none aree 'hostname'` → `aree-home` ✓. First-connect added aree-home to `known_hosts`. (The earlier 2026-05-12 entry only authorized the pubkey on aree-home — it never tested the client direction from DESKTOP itself.)
+- **2026-05-13 ~08:04 GMT+7** — Step 1.2 + 1.3 closed via the same `aree-install.ps1` flow as RDLT. Pulled script with `scp -o RemoteCommand=none aree:aree-install.ps1 ./aree-install.ps1` (3506 bytes), ran with `powershell -ExecutionPolicy Bypass -File`. Script created WT profile `Aree (aree-home)` (GUID `{374a4e37-b01d-4d84-8310-461849dbed94}`, commandline `ssh aree`) in `…\WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json` (backup at `settings.json.backup.20260513-080414`), and `C:\Users\Toey\Desktop\Aree.lnk` → `wt.exe -p "Aree (aree-home)"`. Toey confirmed both Desktop double-click and WT dropdown launch the Aree tmux session. ✅ Phase 1 DESKTOP complete. Whole DESKTOP run cost ~5 min — validates the "scp + run-from-file" pattern as a repeatable per-machine installer.
 
 ### Phase 2 — Android (ROG Phone 7 Series)
 - **2026-05-12 ~21:00 GMT+7** — Tailscale already installed on phone (joined tailnet 2026-05-11, IP `100.95.74.25`, node `rog-phone-7-series`). Was offline 3h due to Android battery optimization killing the background service — brought online by reopening Tailscale app. Pending: set Tailscale to "Unrestricted" battery if offlines become recurring.
