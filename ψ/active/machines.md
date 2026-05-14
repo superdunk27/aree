@@ -221,20 +221,23 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 ## rog-phone-7-series
 
 **Aliased**: Toey's phone — Aree mobile client (joined fleet 2026-05-12)
-**OS**: Android (ROG Phone 7 Series)
-**Role**: Read-mostly client — attaches into `aree` tmux session on aree-home via Termius. No local Claude Code, no skills repo, no writes to ψ/.
-**Last-updated**: 2026-05-12 ~21:10 GMT+7 (Phase 2 closed — Termius profile connects + auto-attaches tmux)
+**OS**: Android (ROG Phone 7 Series — `ASUS_AI2205_D` per JPEG EXIF, firmware `WW_35.0604.0820.85_20260402`)
+**Role**: Primary mobile client via **Termux** (added 2026-05-13) — attaches into `aree` tmux session on aree-home. Termius retained as last-resort fallback. No local Claude Code, no skills repo, no writes to ψ/.
+**Last-updated**: 2026-05-14 ~09:35 GMT+7 (Termux `pic` alias for one-word photo upload from camera roll to aree-home `~/inbox/` — pipeline tested end-to-end)
 
 ### Current state
 
 | Layer | Value |
 |---|---|
 | Tailscale | ✓ joined tailnet `superdunk27.github`, IP `100.95.74.25`, node name `rog-phone-7-series` |
-| Termius app | ✓ installed (free tier) |
-| SSH key | ed25519 generated in Termius vault, name `rog-phone-toey-2026-05-12`, fingerprint `SHA256:Pyo9/L0pqNziGZgR/Nsw2JAC/6nTxPB0tjMYx9EKbOk` |
-| Pubkey on aree-home | ✓ appended to `~/.ssh/authorized_keys` 2026-05-12 ~21:10 GMT+7 |
+| Termius app | ✓ installed (free tier) — kept as fallback only, last-resort path |
+| **Termux app** (primary 2026-05-13+) | ✓ from F-Droid (Play Store version deprecated). `pkg install openssh tmux git nano`. ed25519 key `rog-phone-termux` (fingerprint `SHA256:bCmeXA5gxsLVhWqaF+Upd9jNwsFeYK+No73TwNbpLxk`) in `~/.ssh/id_ed25519_aree`. `~/.ssh/config` has `Host aree` block (set up 2026-05-14 ~09:00 via line-by-line `echo >> file` paste — multi-line heredoc paste broke twice from chat code-block wrap). `~/.bashrc` has alias `aree=ssh -i ~/.ssh/id_ed25519_aree toey@100.77.60.57` and alias `pic=~/p`. |
+| **`pic` photo-upload alias** | ✓ 2026-05-14 ~09:35 GMT+7. `~/storage/dcim/Camera` symlinked to `~/cam`. Script `~/p` (3 lines: `cd ~/cam; f=$(ls -t|head -1); scp "$f" aree:inbox/`) sends the most-recently-taken photo. Toey types `pic` Enter → newest camera roll photo lands in `/home/toey/inbox/` on aree-home, Aree `Read`s it. End-to-end tested with `P_20260513_163942.jpg` (~1.9 MB), <1s transfer over Tailscale LAN. **Workflow rationale**: Toey said "ผมจำไม่ได้หรอกว่าส่งยังไง ชื่อไฟล์รูปก็ยาว" → reduced 70-char `scp` command to typing the 3-letter word `pic`. |
+| SSH key (Termius vault) | ed25519, name `rog-phone-toey-2026-05-12`, fingerprint `SHA256:Pyo9/L0pqNziGZgR/Nsw2JAC/6nTxPB0tjMYx9EKbOk` |
+| Pubkeys on aree-home | ✓ both appended to `~/.ssh/authorized_keys`: Termius (`rog-phone-toey-2026-05-12`, 2026-05-12 ~21:10) + Termux (`rog-phone-termux`, 2026-05-13 ~12:55) |
 | Host profile in Termius | `Aree (aree-home)` → `toey@100.77.60.57:22`, key = `rog-phone-toey-2026-05-12` |
-| tmux auto-attach | provided server-side via `~/.bashrc` on aree-home — no client-side startup snippet needed (Termius free tier hides that field) |
+| tmux auto-attach | provided server-side via `~/.bashrc` on aree-home — no client-side startup snippet needed (Termius free tier hides that field, Termux ssh login also benefits) |
+| **Storage permission** | `termux-setup-storage` granted 2026-05-14 — Termux can read `~/storage/dcim/Camera/` and other Android shared storage |
 
 ### Removed / Excluded
 - Claude Code CLI — NOT installed on phone (would not run sustainably on Android anyway). Phone is a client into aree-home's session, not a host.
