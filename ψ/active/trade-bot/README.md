@@ -47,13 +47,15 @@ Useful as a phone-side dashboard without ssh.
 
 ## Bug history (Aree-discovered 2026-05-14)
 
-Three layered bugs together produced "alive but evaluating zero trades for 8 days":
+Four layered bugs together produced "alive but evaluating zero trades for 8 days":
 
 1. **DRY_RUN mismatch**: `.env` had `DRY_RUN=false` but its mtime was 1 second *after* the bot process start (2026-04-27 23:08:28 process vs 23:08:29 file). Bot read the old default `dry_run=True` at boot, then ran for 16 days as a pure simulation. Telegram `/status` showed `Mode: TESTNET` so the mode looked right at the surface. Fix: restart bot. (Done 2026-05-14 ~13:16.)
 
 2. **Empty-data crash in supertrend()**: during a Binance testnet 502 outage on 2026-05-06, the fetch wrapper returned empty DataFrames rather than raising. `strategy.py:supertrend()` called `np.argmax(~np.isnan(a))` on an empty array → `ValueError: attempt to get argmax of an empty sequence`. The try/except at the tick level (main.py) caught it and continued, so systemd never saw a failure to restart on. After the outage cleared, the bot kept ticking with no signal evaluation for 8 days. Fix: commit `be1842a` — guard `if n == 0` and `if not np.any(~np.isnan(a))` before the argmax; also added `data.fetch_empty` WARNING in main.py so the operator sees the outage instead of inferring it from absence of `signal.bar`.
 
 3. **Systemd Restart=on-failure didn't help**: the bot caught its own exceptions and kept looping. systemd's restart policy only fires on non-zero exit, which never happened. Fix: added external watchdog (`trade-bot-watchdog.service` + `.timer`, every 10 min) that scans the log for the last `signal.bar | data.fetch_failed | data.fetch_empty | tick.symbol_error` event and restarts the bot if nothing newer than 90 min, with a grace period of 90 min after each service start.
+
+4. **Testnet has insufficient kline history for EMA200**: even with bugs 1–3 fixed, the bot still couldn't fire a signal because Binance Testnet retains only ~183 bars of 1h klines (~7.6 days), while `strategy.latest_state()` requires `len(df) >= max(ema_len, 50)` = 200 bars to leave warmup. The bot was correctly evaluating each tick but silently returning None at `pd.isna(last["ema200"])` because EMA200 hadn't converged. Verified by running fetch+compute manually on the server: `df_1h=183, signal: None`. Fix: commit `dd20207` on `superdunk27/Trade` adds a separate `data_client` to `Exchange` always pointed at mainnet (OHLCV is a public endpoint, no key needed); orders + balance still go through the testnet-aware `self.client`. After deploy: data_client returns 500 bars from mainnet, strategy evaluates cleanly, first `signal.bar` event in 8 days fired at 2026-05-14 07:14 UTC.
 
 The full diagnostic narrative is in `ψ/memory/retrospectives/2026-05/14/` (the retro for this date).
 
