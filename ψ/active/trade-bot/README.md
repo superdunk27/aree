@@ -76,12 +76,44 @@ ssh root@103.107.52.225 'journalctl -t trade-bot-watchdog --since "1 day ago" --
 ssh root@103.107.52.225 'cat /root/trade-bot/bot/state.json'
 ```
 
-## Things still pending
+## Execution path verification (closed 2026-05-14 ~14:41 GMT+7)
 
-- **Telegram bot token rotation** — not done; Toey paste-leaked it into chat 2026-05-14 in the diagnostic conversation. Blast radius is low (chat_id whitelist prevents command execution, only spoofing of bot replies possible), so deferred at Toey's call. Rotate via @BotFather → `/mybots` → "Revoke current token" if/when convenient.
-- **Binance testnet API keys** — also paste-leaked. Testnet = no real money, lowest possible stakes; rotate is hygiene-only.
-- **Pre-live checklist** — when Toey decides to flip to live: change `BINANCE_TESTNET=false`, fresh API keys with Spot-only permission (no Withdraw, no Margin), confirm equity bootstrapping, run for several days at smaller risk_pct before scaling.
-- **Bot/PostgreSQL/Redis integration** — `.env` references both but actual usage in code wasn't audited. Worth a look before live trading.
+After the four bug-fixes above were deployed, the bot could generate `signal.bar` events but no signal had actually fired yet (current regime is bearish on both 1h and 4h, strategy waiting for bullish flip). Without a fired signal, there was no way to observe whether the order-submission code path actually works on Binance testnet. The previous retro's "execution verification" goal was therefore still open.
+
+Closed by a direct API-path test from a server Python shell, bypassing the strategy layer entirely:
+
+```text
+Step 1 — fetch_balance("USDT") on testnet:     10,000.0 ✓ (testnet account funded; auth accepts our key+secret)
+Step 2 — fetch_price BTC/USDT, ETH/USDT:        79881.21, 2269.40 ✓ (live testnet ticker)
+Step 3 — market_buy_quote("BTC/USDT", $10):     filled 0.00012 BTC @ 79883.28, order_id=3287062 ✓
+Step 4 — market_sell_base("BTC/USDT", 0.00012): filled @ 79883.27, order_id=3287063 ✓
+Round-trip P&L: -$0.000001 USDT (spread + rounding only)
+Balance after: 9999.9999988 USDT ← matches expected
+```
+
+The full API path is verified: auth, market data fetch, order submission, fill report, symmetric round-trip, balance update. When the strategy fires a real entry signal, the order will go through the same code path that ran clean today.
+
+### Worth noting for pre-live
+
+- **Testnet fees = 0** (`fee=0.0` in both `order.buy.filled` and `order.sell.filled` logs). Binance live spot trading charges **0.1% per side** (0.075% with BNB). Backtest assumed a fee figure (whatever `settings.fee` is set to — check `bot/config.py`); the round-trip on testnet appears free, so the testnet equity curve will diverge favorably from what live would produce. Don't read testnet P&L as a forecast.
+- **Test artifacts on server**: `/root/trade-bot/test_exec.py` and `/root/trade-bot/test_order.py` (both gitignored — `*.py` is not in `.gitignore` but these are test scripts so they're cluttering. Delete or move to a `scripts/` folder if Toey wants the bot directory clean).
+
+## Pre-live checklist (when Toey decides to flip to real trading)
+
+1. **Rotate API keys** — generate fresh Binance Spot API keys (mainnet, this time), permission set to **Spot trading only** — no Withdraw, no Margin, no Futures. The current `.env` keys are testnet-only.
+2. **Edit `.env`**: `BINANCE_TESTNET=false`. (`DRY_RUN=false` already correct.)
+3. **Verify balance bootstrapping**: live `fetch_balance` will return Toey's actual USDT balance. Bot uses this to compute position size via `risk_pct × equity`. Confirm the equity figure matches Toey's expectation before letting the bot trade.
+4. **First-flight risk_pct**: consider starting at `risk_pct=0.001` (0.1%) for the first 1–2 weeks instead of the default 0.01 (1%). Smaller positions during initial live deployment in case any edge case wasn't caught.
+5. **Watch first signal closely**: when the first live `signal.bar` fires with `entry=true`, Toey should be at a desk to observe the `order.buy.filled` event and confirm fill semantics match expectations. The watchdog covers "system died" but not "system fills weird first order."
+6. **Restart bot after `.env` change**: `systemctl restart trade-bot` reloads config.
+7. **Don't forget to check fees**: confirm `settings.fee` in config matches actual Binance fee tier (0.001 default for spot regular, lower with BNB or VIP tiers).
+
+## Things still pending (low priority)
+
+- **Telegram bot token rotation** — paste-leaked 2026-05-14 in the diagnostic conversation. Blast radius low (chat_id whitelist prevents command execution, only spoofing of bot replies possible). Rotate via @BotFather → `/mybots` → "Revoke current token" when convenient.
+- **Binance testnet API keys** — also paste-leaked. Testnet = no real money, rotate is hygiene-only.
+- **Bot/PostgreSQL/Redis integration** — `.env` references both but actual usage in code wasn't audited. Quick `grep -rE "postgres|redis|sqlalchemy|aiopg|asyncpg" bot/` would resolve this. Worth doing before live trading.
+- **Aree's self-introduction comment** posted on the family birth issue 2026-05-14 ~14:50: https://github.com/Soul-Brews-Studio/arra-oracle-v3/issues/1143#issuecomment-4448737717 — not directly trade-bot-related but happened in the same session as the bot debug, and the comment's pattern-of-the-day (`"declared done" ≠ "doing the work"`) is the lesson surfaced *by* the trade-bot debug.
 
 ## Why this project is here in `ψ/active/` and not `ψ/learn/projects/`
 
