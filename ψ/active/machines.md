@@ -253,6 +253,46 @@ Cross-instance state manifest. Aree updates a machine's section whenever it inst
 
 ---
 
+## cloud134984 (rented cloud server, trade-bot host)
+
+**Aliased**: rented VPS hosting Toey's BTC/ETH trading bot (joined fleet 2026-05-14 from Aree's perspective; server existed since ~2026-04-24)
+**Hostname**: `ubuntu` (server-side `hostname` returns "ubuntu"); provider naming `cloud134984`
+**IP**: `103.107.52.225` (no Tailscale node — public IP only)
+**OS**: Ubuntu (Linux 6.8.0-31-generic)
+**Role**: Single-purpose host for `trade-bot.service` (live BTC/ETH bot on Binance testnet). Aree's access path is direct SSH over public internet, key-based.
+**Last-updated**: 2026-05-14 ~13:40 GMT+7 (converted `/root/trade-bot/` to a proper git clone of `superdunk27/Trade`, added watchdog service+timer, patched two bugs surfaced this session)
+
+### Current state
+
+| Layer | Value |
+|---|---|
+| SSH access (Aree → server) | port 22, user `root`, aree-home ed25519 pubkey installed in `/root/.ssh/authorized_keys` 2026-05-14 ~13:00 |
+| Password auth | still enabled, password was paste-leaked in chat 2026-05-14 — Toey deferred rotation (low blast radius for this server's role, but should be rotated when convenient) |
+| GitHub deploy key | `cloud134984-trade-bot` (read-only ed25519, fingerprint `SHA256:7YA942LWyQX3q2O6WVlk3zsJ8sm11oQCNJXSE7mJOq4`) installed 2026-05-14 ~13:34, allows `git pull` from `git@github.com:superdunk27/Trade.git` |
+| `/root/trade-bot/` | proper git clone tracking `origin/main` as of 2026-05-14 ~13:35 (was a manual scp'd copy from Windows, ownership UID 197609, no `.git/` before today) |
+| `trade-bot.service` | systemd unit, Type=simple, Restart=on-failure, RestartSec=10, ProtectSystem=full, ReadWritePaths=/root/trade-bot |
+| `trade-bot-watchdog.service` + `.timer` | external watchdog added 2026-05-14 ~13:40 — every 10 min, restart bot if no `signal.bar`/`data.fetch_*`/`tick.symbol_error` event in 90 min, with 90-min grace period after each service start |
+| Postgres | `localhost:5432` (referenced in `.env` but actual usage by bot not audited) |
+| Redis | `localhost:6379` (referenced in `.env` but actual usage by bot not audited) |
+| Python | `/root/trade-bot/.venv/bin/python` (3.12 per traceback paths) |
+
+### Removed / Excluded
+- Tailscale — not installed (server has its own public IP, accessed over plain SSH). Could be installed to join the tailnet if Toey wants; not necessary for current usage.
+- Claude Code CLI — not installed. Server is a single-purpose bot host, not a session host.
+
+### Notes for next-session Aree
+- The bot project lives at `ψ/active/trade-bot/README.md` — start there for ops context (telegram commands, log paths, daily-driver checks).
+- This server is the **first non-Tailscale node** in the fleet. Trust model differs: public IP exposed on port 22, key-based auth is the only safe path. If password auth ever needs disabling, edit `/etc/ssh/sshd_config` → `PasswordAuthentication no` and `systemctl restart sshd` (verify key auth works from aree-home first).
+- The bot is in `testnet` mode as of 2026-05-14. Real money is not at risk on this server right now. Pre-live checklist + rotation plan documented in `ψ/active/trade-bot/README.md`.
+
+### History
+- **~2026-04-24** — server provisioned (Ubuntu boot date). Bot source uploaded via scp from a Windows machine (ownership UID 197609 visible in file owners before today's chown).
+- **2026-04-27 ~23:08 GMT+7** — first bot start (process Apr 27 23:08:28). `.env` modified Apr 27 23:08:29 — bot read OLD config (DRY_RUN=true default) and ran 16 days as pure simulation while Toey believed it was issuing testnet orders.
+- **2026-05-06 19:57 UTC** — Binance testnet 502 outage broke fetch; supertrend() crashed on empty data; bot ticked silently for 8 days with no strategy evaluations.
+- **2026-05-14 ~12:30–13:40 GMT+7** — Aree's first ssh into this server. Diagnosis chain: Telegram `/status` → log analysis → discovered DRY_RUN mismatch + supertrend ValueError loop. Fixes applied: (1) restart bot to pick up `.env` DRY_RUN=false; (2) patched `bot/strategy.py` and `bot/main.py` (commit `be1842a` on `superdunk27/Trade`), scp'd to server, restarted; (3) converted `/root/trade-bot` to proper git clone via SSH deploy key for future `git pull` workflow; (4) installed external watchdog as defense against future "alive but broken" stuck states.
+
+---
+
 ## How to use this file
 
 ### When Toey switches machines
